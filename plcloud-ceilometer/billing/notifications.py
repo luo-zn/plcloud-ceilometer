@@ -46,3 +46,6 @@ class ProcessBillingNotifications(plugin_base.NotificationBase):
                            for topic in
                            self.get_notification_topics(conf))
         return targets
+
+    def process_notification(self, notification_body):
+        print 'sssssss process_notification=', notification_body
