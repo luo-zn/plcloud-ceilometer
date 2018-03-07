@@ -10,7 +10,7 @@ from ceilometer.agent import plugin_base
 LOG = log.getLogger(__name__)
 
 
-class ProcessBillingNotifications(plugin_base.NotificationBase):
+class BillingBase(plugin_base.NotificationBase):
     event_types = []
 
     def __init__(self, manager):
@@ -46,6 +46,3 @@ class ProcessBillingNotifications(plugin_base.NotificationBase):
                            for topic in
                            self.get_notification_topics(conf))
         return targets
-
-    def process_notification(self, notification_body):
-        print 'sssssss process_notification=', notification_body
