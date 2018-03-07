@@ -14,7 +14,7 @@ class BillingBase(plugin_base.NotificationBase):
     event_types = []
 
     def __init__(self, manager):
-        super(ProcessBillingNotifications, self).__init__(manager)
+        super(BillingBase, self).__init__(manager)
 
     def get_targets(self, conf):
         """Return a sequence of oslo_messaging.Target
