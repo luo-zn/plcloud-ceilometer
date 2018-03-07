@@ -46,3 +46,14 @@ class BillingBase(plugin_base.NotificationBase):
                            for topic in
                            self.get_notification_topics(conf))
         return targets
+
+    @staticmethod
+    def _package_payload(message, payload):
+        # NOTE(chdent): How much of the payload should we keep?
+        info = {'publisher_id': message['publisher_id'],
+                'timestamp': message['payload']['timestamp'],
+                'event_type': message['payload']['event_type'],
+                'user_id': message['payload'].get('user_id'),
+                'project_id': message['payload'].get('project_id'),
+                'payload': payload}
+        return info
