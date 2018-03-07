@@ -34,7 +34,7 @@ class Instance(BillingBase):
                     'vcpus': message['payload']['vcpus'],
                     'disk_gb': message['payload']['disk_gb'],
                     'ephemeral_gb': message['payload']['ephemeral_gb']}
-        info = self._package_payload(message, payload)
+        info = self._package_payload(message, message['payload'])
         yield sample.Sample.from_notification(
             name='%s.%s' % (message['event_type'], res_name),
             type=res_type,
@@ -70,7 +70,7 @@ class Volume(BillingBase):
         res_type = 'volume'
         timestamp = message['timestamp']
         res_meta = {'volume_gb': message['payload']['size']}
-        info = self._package_payload(message, payload)
+        info = self._package_payload(message, message['payload'])
         yield sample.Sample.from_notification(
             name='%s.%s' % (message['event_type'], res_name),
             type=res_type,
