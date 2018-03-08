@@ -38,7 +38,7 @@ class Instance(BillingBase):
         yield sample.Sample.from_notification(
             name='%s.%s' % (message['event_type'], res_name),
             type=res_type,
-            unit=unit,
+            unit=message['event_type'].split('.')[1],
             volume=volume,
             resource_id=resource_id,
             message=info,
@@ -74,7 +74,7 @@ class Volume(BillingBase):
         yield sample.Sample.from_notification(
             name='%s.%s' % (message['event_type'], res_name),
             type=res_type,
-            unit=unit,
+            unit='GB',
             volume=volume,
             resource_id=resource_id,
             message=info,
