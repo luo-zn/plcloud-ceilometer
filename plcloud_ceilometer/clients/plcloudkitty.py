@@ -36,7 +36,7 @@ class PLClient(object):
         """Initialize a nova client object."""
         creds = conf.service_credentials
         logger = None
-        if conf.plcloudkitty_http_log_debug:
+        if hasattr(conf, "plcloudkitty_http_log_debug"):
             logger = log.getLogger("plcloudkittyclient-debug")
             logger.logger.setLevel(log.DEBUG)
         ks_session = keystone_client.get_session(conf)

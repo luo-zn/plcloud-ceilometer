@@ -14,12 +14,12 @@ class TestPLClient(base.BaseTestCase):
         super(TestPLClient, self).setUp()
         conf = service.prepare_service([], [])
         self.CONF = self.useFixture(fixture_config.Config(conf)).conf
-        # self.plclient = PLClient(self.CONF)
+        self.plclient = PLClient(self.CONF)
 
     def test_conf_opts(self):
         self.assertIn('plcloudkitty_http_log_debug', self.CONF.keys())
         self.assertIn('service_types', self.CONF.keys())
         self.assertIn('plcloudkitty', self.CONF.service_types.keys())
 
-    # def test_plcloudkitty_client(self):
-    #     print self.plclient
+    def test_plcloudkitty_client(self):
+        print self.plclient
