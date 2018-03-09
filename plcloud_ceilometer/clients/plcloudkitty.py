@@ -22,6 +22,9 @@ SERVICE_OPTS = [
                default='plcloudkitty',
                help='plcloudkitty service type.'),
 ]
+CONF = cfg.CONF
+CONF.register_opts(OPTS)
+CONF.register_opts(SERVICE_OPTS, group='service_types')
 
 LOG = log.getLogger(__name__)
 
