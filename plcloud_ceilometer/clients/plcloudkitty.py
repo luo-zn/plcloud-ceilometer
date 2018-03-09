@@ -40,14 +40,17 @@ class PLClient(object):
             logger = log.getLogger("plcloudkittyclient-debug")
             logger.logger.setLevel(log.DEBUG)
         ks_session = keystone_client.get_session(conf)
+        service_type = 'plcloudkitty'
+        if hasattr(conf, 'service_types'):
+            service_type = getattr(conf.service_types, 'plcloudkitty', 'plcloudkitty')
+
         self.plck_client = plck_client.Client(
             version='1',
             session=ks_session,
-
             # adapter options
             region_name=creds.region_name,
             endpoint_type=creds.interface,
-            service_type=conf.service_types.plcloudkitty,
+            service_type=service_type,
             logger=logger)
 
 
