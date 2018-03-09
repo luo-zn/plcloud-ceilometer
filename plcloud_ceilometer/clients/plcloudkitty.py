@@ -22,9 +22,6 @@ SERVICE_OPTS = [
                default='plcloudkitty',
                help='plcloudkitty service type.'),
 ]
-CONF = cfg.CONF
-CONF.register_opts(OPTS)
-CONF.register_opts(SERVICE_OPTS, group='service_types')
 
 LOG = log.getLogger(__name__)
 
@@ -34,24 +31,30 @@ class PLClient(object):
 
     def __init__(self, conf):
         """Initialize a nova client object."""
+        self._check_plcloudkitty_default_conf(conf)
         creds = conf.service_credentials
         logger = None
-        if hasattr(conf, "plcloudkitty_http_log_debug"):
+        if conf.plcloudkitty_http_log_debug:
             logger = log.getLogger("plcloudkittyclient-debug")
             logger.logger.setLevel(log.DEBUG)
         ks_session = keystone_client.get_session(conf)
-        service_type = 'plcloudkitty'
-        if hasattr(conf, 'service_types'):
-            service_type = getattr(conf.service_types, 'plcloudkitty', 'plcloudkitty')
-
         self.plck_client = plck_client.Client(
             version='1',
             session=ks_session,
             # adapter options
             region_name=creds.region_name,
             endpoint_type=creds.interface,
-            service_type=service_type,
-            logger=logger)
+            service_type=conf.service_types.plcloudkitty,
+            # logger=logger
+        )
+
+    @classmethod
+    def _check_plcloudkitty_default_conf(cls, conf):
+        if not hasattr(conf, "plcloudkitty_http_log_debug"):
+            conf.register_opts(OPTS)
+        if not hasattr(conf, 'service_types') or not hasattr(
+                conf.service_types, 'plcloudkitty'):
+            conf.register_opts(SERVICE_OPTS, group='service_types')
 
 
 class PLCloudkittyClient(ClientBase):
