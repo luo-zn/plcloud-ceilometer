@@ -63,8 +63,8 @@ class PLCloudkittyClient(ClientBase):
         ks_session = keystone_client.get_session(self.conf)
         endpoint = plck_client._get_endpoint(ks_session)
         return plck_client.Client('1', endpoint, token=ks_session.get_token(),
-        insecure = self.conf.service_credentials.insecure,
-        cacert = getattr(self.conf.service_credentials, 'cacert', None))
+        insecure=self.conf.service_credentials.insecure,
+        cacert=getattr(self.conf.service_credentials, 'cacert', None))
 
     def get_billing(self):
         return self.client.billings.billing_manager.get_billing()
