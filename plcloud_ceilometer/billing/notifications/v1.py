@@ -75,7 +75,7 @@ class Volume(BillingBase):
             name='%s.%s' % (message['event_type'], res_name),
             type=res_type,
             unit='GB',
-            volume=volume,
+            volume=message['payload']['size'],
             resource_id=resource_id,
             message=info,
             user_id=user_id,
