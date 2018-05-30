@@ -59,8 +59,8 @@ class BillingBase(plugin_base.NotificationBase):
             try:
                 notification = messaging.convert_to_old_notification_format(
                     priority, notification)
-                notification = self.plcloudkitty_billing(notification)
-                self.to_samples_and_publish(notification)
+                self.plcloudkitty_billing(notification)
+                # self.to_samples_and_publish(notification)
             except Exception:
                 LOG.error(_LE('Fail to process notification'), exc_info=True)
 
