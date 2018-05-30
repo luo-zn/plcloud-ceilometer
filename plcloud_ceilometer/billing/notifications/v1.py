@@ -79,11 +79,22 @@ class Volume(BillingBase):
         #     user_id=user_id,
         #     project_id=tenant_id,
         #     timestamp=timestamp,metadata=res_meta)
-        return {"res_id": message["_context_request_id"],
-         "res_name": message["payload"]["display_name"],
-         "res_meta": message['payload'],
-         "res_type": message['event_type'].split(".")[0],
-         "user_id": message['payload']['user_id'],
-         "region": self.region_name,
-         "message_id": message['message_id'],
-         "event_type": message['event_type']}
+        user_id = message['payload']['user_id']
+        project_id = message['payload']['tenant_id']
+        res_id = message['payload']['volume_id']
+        res_name = message['payload']['display_name']
+        res_type = 'volume'
+        message_id = message['message_id']
+        timestamp = message['timestamp']
+        event_type = message['event_type']
+        res_meta = {'volume_gb': message['payload']['size']}
+        return {'message_id': message_id,
+                'res_id': res_id,
+                'res_name': res_name,
+                'res_meta': res_meta,
+                'res_type': res_type,
+                'event_type': event_type,
+                'timestamp': timestamp,
+                'user_id': user_id,
+                "region": self.region_name,
+                'project_id': project_id}
