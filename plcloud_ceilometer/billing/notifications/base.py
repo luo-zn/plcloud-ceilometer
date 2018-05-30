@@ -3,6 +3,7 @@
 """
 __author__ = "Jenner.luo"
 
+import types
 import fnmatch
 import oslo_messaging
 from oslo_log import log
@@ -68,7 +69,9 @@ class BillingBase(plugin_base.NotificationBase):
         if self.need_to_handle(notification['event_type'], self.event_types):
             sample = self.process_notification(notification)
             if sample:
-                return self._create_billing(sample.as_dict())
+                if type(sample) is types.GeneratorType:
+                    sample = sample.as_dict()
+                return self._create_billing(sample)
         return []
 
     @staticmethod
@@ -96,7 +99,7 @@ class BillingBase(plugin_base.NotificationBase):
             res = self.plcli.create_billing(sample_dict)
             LOG.info('Billing %s (%s, %s): %s',
                      sample_dict['res_type'], sample_dict['res_name'],
-                     sample_dict['res_id'],res)
+                     sample_dict['res_id'], res)
             return res
         except Exception as error:
             LOG.error(error)

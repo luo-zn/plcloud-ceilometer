@@ -170,3 +170,10 @@ create_volume = {u'_context_domain': None,
                  u'_context_project_id': u'e354e01da1a54aab9b471b77422549e6',
                  u'_context_read_only': False,
                  u'_context_user_domain': u'default'}
+
+
+def test():
+    yield
+
+
+
