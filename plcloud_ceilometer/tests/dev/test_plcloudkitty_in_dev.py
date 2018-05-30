@@ -8,7 +8,7 @@ from oslotest import base
 from oslo_config import fixture as fixture_config
 from ceilometer import service
 from plcloud_ceilometer.clients.plcloudkitty import PLCloudkittyClient
-from plcloudkittyclient.v1.client import Client as pl_v1_client
+from plcloudkittyclient.common import utils
 
 
 class TestPLClient(unittest.TestCase):
@@ -17,10 +17,15 @@ class TestPLClient(unittest.TestCase):
         conf = service.prepare_service()
         self.plclient = PLCloudkittyClient(conf)
 
+    @classmethod
+    def get_plcloudkitty_client(cls, version):
+        module = utils.import_versioned_module(version, 'client')
+        return getattr(module, 'Client')
+
     def test_plcloudkitty_client(self):
         self.assertIsInstance(self.plclient, PLCloudkittyClient)
-        self.assertIsInstance(self.plclient.client, pl_v1_client)
-        print self.plclient
+        plcloudkitty_client = self.get_plcloudkitty_client('1')
+        self.assertIsInstance(self.plclient.client, plcloudkitty_client)
 
 
 if __name__ == '__main__':
