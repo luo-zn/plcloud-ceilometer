@@ -20,7 +20,7 @@ class BillingBase(plugin_base.NotificationBase):
     def __init__(self, manager):
         super(BillingBase, self).__init__(manager)
         self.plcli = PLCloudkittyClient(manager.conf)
-        self.region = manager.conf.service_credentials.os_region_name
+        self.region_name = manager.conf.service_credentials.region_name
 
     def get_targets(self, conf):
         """Return a sequence of oslo_messaging.Target
