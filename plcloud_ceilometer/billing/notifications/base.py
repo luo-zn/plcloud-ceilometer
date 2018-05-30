@@ -18,9 +18,8 @@ class BillingBase(plugin_base.NotificationBase):
 
     def __init__(self, manager):
         super(BillingBase, self).__init__(manager)
-        self.plcli = PLCloudkittyClient()
-        print self.plcli.conf
-        print dir(plcli.conf)
+        self.plcli = PLCloudkittyClient(manager.conf)
+        self.region = manager.conf.service_credentials.os_region_name
 
     def get_targets(self, conf):
         """Return a sequence of oslo_messaging.Target
@@ -56,13 +55,29 @@ class BillingBase(plugin_base.NotificationBase):
     def _process_notifications(self, priority, notifications):
         for notification in notifications:
             try:
-                print 'before convert notification=', notifications
                 notification = messaging.convert_to_old_notification_format(
                     priority, notification)
-                print 'after convert notification=', notifications
-                self.to_samples_and_publish(notification)
+                notification = self.plcloudkitty_billing(notification)
+                if notification:
+                    self.to_samples_and_publish(notification)
             except Exception:
                 LOG.error(_LE('Fail to process notification'), exc_info=True)
+
+    def plcloudkitty_billing(self, notification):
+        if self.need_to_handle(notification['event_type'], self.event_types):
+            event = self.process_notification(notification)
+            if event:
+                return self._create_billing(event)
+        return []
+
+    @staticmethod
+    def need_to_handle(event_type, event_types):
+        """ To check whether event_type should be handled according to event_types
+        :param event_type: str
+        :param event_types: list
+        :return:
+        """
+        return any(map(lambda e: fnmatch.fnmatch(event_type, e), event_types))
 
     @staticmethod
     def _package_payload(message, payload):
@@ -74,3 +89,13 @@ class BillingBase(plugin_base.NotificationBase):
                 'project_id': message['payload'].get('project_id'),
                 'payload': payload}
         return info
+
+    def _create_billing(self, notifications):
+        try:
+            res = self.plcli.create_billing(notifications)
+            LOG.info('Billing %s (%s, %s): %s',
+                     event['res_type'], event['res_name'], event['res_id'],
+                     res)
+            return res
+        except Exception as error:
+            LOG.error(error)

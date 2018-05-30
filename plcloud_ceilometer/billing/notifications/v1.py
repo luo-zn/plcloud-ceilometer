@@ -22,7 +22,6 @@ class Instance(BillingBase):
                 for topic in self.get_notification_topics(conf)]
 
     def process_notification(self, message):
-        print 'Instance notification=', message
         LOG.debug(_('Instance notification %r') % message)
         user_id = message['payload']['user_id']
         tenant_id = message['payload']['tenant_id']
@@ -61,7 +60,6 @@ class Volume(BillingBase):
                 for topic in self.get_notification_topics(conf)]
 
     def process_notification(self, message):
-        print 'Volume notification=', message
         LOG.debug(_('Volume notification %r') % message)
         user_id = message['payload']['user_id']
         tenant_id = message['payload']['tenant_id']
