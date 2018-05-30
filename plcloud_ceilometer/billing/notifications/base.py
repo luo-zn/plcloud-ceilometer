@@ -5,7 +5,9 @@ __author__ = "Jenner.luo"
 
 import oslo_messaging
 from oslo_log import log
+from ceilometer import service, messaging
 from ceilometer.agent import plugin_base
+from plcloud_ceilometer.clients.plcloudkitty import PLCloudkittyClient
 
 LOG = log.getLogger(__name__)
 
@@ -15,6 +17,8 @@ class BillingBase(plugin_base.NotificationBase):
 
     def __init__(self, manager):
         super(BillingBase, self).__init__(manager)
+        self.conf = service.prepare_service()
+        self.plcli = PLCloudkittyClient(self.conf)
 
     def get_targets(self, conf):
         """Return a sequence of oslo_messaging.Target
@@ -46,6 +50,17 @@ class BillingBase(plugin_base.NotificationBase):
                            for topic in
                            self.get_notification_topics(conf))
         return targets
+
+    def _process_notifications(self, priority, notifications):
+        for notification in notifications:
+            try:
+                print 'before convert notification=', notifications
+                notification = messaging.convert_to_old_notification_format(
+                    priority, notification)
+                print 'after convert notification=', notifications
+                self.to_samples_and_publish(notification)
+            except Exception:
+                LOG.error(_LE('Fail to process notification'), exc_info=True)
 
     @staticmethod
     def _package_payload(message, payload):
