@@ -23,27 +23,48 @@ class Instance(BillingBase):
 
     def process_notification(self, message):
         LOG.debug(_('Instance notification %r') % message)
+        # user_id = message['payload']['user_id']
+        # tenant_id = message['payload']['tenant_id']
+        # resource_id = message['payload']['instance_id']
+        # res_name = message['payload']['display_name']
+        # res_type = 'instance'
+        # timestamp = message['timestamp']
+        # res_meta = {'memory_gb': message['payload']['memory_mb'] / 1024,
+        #             'vcpus': message['payload']['vcpus'],
+        #             'disk_gb': message['payload']['disk_gb'],
+        #             'ephemeral_gb': message['payload']['ephemeral_gb']}
+        # info = self._package_payload(message, message['payload'])
+        # yield sample.Sample.from_notification(
+        #     name='%s.%s' % (message['event_type'], res_name),
+        #     type=res_type,
+        #     unit=message['event_type'].split('.')[1],
+        #     volume=volume,
+        #     resource_id=resource_id,
+        #     message=info,
+        #     user_id=user_id,
+        #     project_id=tenant_id,
+        #     timestamp=timestamp, metadata=res_meta)
         user_id = message['payload']['user_id']
         tenant_id = message['payload']['tenant_id']
-        resource_id = message['payload']['instance_id']
+        res_id = message['payload']['instance_id']
         res_name = message['payload']['display_name']
         res_type = 'instance'
+        message_id = message['message_id']
         timestamp = message['timestamp']
+        event_type = message['event_type']
         res_meta = {'memory_gb': message['payload']['memory_mb'] / 1024,
                     'vcpus': message['payload']['vcpus'],
                     'disk_gb': message['payload']['disk_gb'],
                     'ephemeral_gb': message['payload']['ephemeral_gb']}
-        info = self._package_payload(message, message['payload'])
-        yield sample.Sample.from_notification(
-            name='%s.%s' % (message['event_type'], res_name),
-            type=res_type,
-            unit=message['event_type'].split('.')[1],
-            volume=volume,
-            resource_id=resource_id,
-            message=info,
-            user_id=user_id,
-            project_id=tenant_id,
-            timestamp=timestamp, metadata=res_meta)
+        return {'message_id': message_id,
+                'res_id': res_id,
+                'res_name': res_name,
+                'res_meta': res_meta,
+                'res_type': res_type,
+                'event_type': event_type,
+                'timestamp': timestamp,
+                'user_id': user_id,
+                'project_id': tenant_id}
 
 
 class Volume(BillingBase):
