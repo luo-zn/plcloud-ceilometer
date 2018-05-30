@@ -73,7 +73,6 @@ class BillingBase(plugin_base.NotificationBase):
                     d = sample.next()
                     sample = d.as_dict()
                 return self._create_billing(sample)
-        return []
 
     @staticmethod
     def need_to_handle(event_type, event_types):
