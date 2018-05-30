@@ -52,16 +52,16 @@ class BillingBase(plugin_base.NotificationBase):
                            self.get_notification_topics(conf))
         return targets
 
-    def _process_notifications(self, priority, notifications):
-        for notification in notifications:
-            try:
-                print 'before convert notification=', notifications
-                notification = messaging.convert_to_old_notification_format(
-                    priority, notification)
-                print 'after convert notification=', notifications
-                self.to_samples_and_publish(notification)
-            except Exception:
-                LOG.error(_LE('Fail to process notification'), exc_info=True)
+    # def _process_notifications(self, priority, notifications):
+    #     for notification in notifications:
+    #         try:
+    #             print 'before convert notification=', notifications
+    #             notification = messaging.convert_to_old_notification_format(
+    #                 priority, notification)
+    #             print 'after convert notification=', notifications
+    #             self.to_samples_and_publish(notification)
+    #         except Exception:
+    #             LOG.error(_LE('Fail to process notification'), exc_info=True)
 
     @staticmethod
     def _package_payload(message, payload):
