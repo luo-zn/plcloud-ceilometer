@@ -61,21 +61,29 @@ class Volume(BillingBase):
 
     def process_notification(self, message):
         LOG.debug(_('Volume notification %r') % message)
-        user_id = message['payload']['user_id']
-        tenant_id = message['payload']['tenant_id']
-        resource_id = message['payload']['volume_id']
-        res_name = message['payload']['display_name']
-        res_type = 'volume'
-        timestamp = message['timestamp']
-        res_meta = {'volume_gb': message['payload']['size']}
-        info = self._package_payload(message, message['payload'])
-        yield sample.Sample.from_notification(
-            name='%s.%s' % (message['event_type'], res_name),
-            type=res_type,
-            unit='GB',
-            volume=message['payload']['size'],
-            resource_id=resource_id,
-            message=info,
-            user_id=user_id,
-            project_id=tenant_id,
-            timestamp=timestamp,metadata=res_meta)
+        # user_id = message['payload']['user_id']
+        # tenant_id = message['payload']['tenant_id']
+        # resource_id = message['payload']['volume_id']
+        # res_name = message['payload']['display_name']
+        # res_type = 'volume'
+        # timestamp = message['timestamp']
+        # res_meta = {'volume_gb': message['payload']['size']}
+        # info = self._package_payload(message, message['payload'])
+        # yield sample.Sample.from_notification(
+        #     name='%s.%s' % (message['event_type'], res_name),
+        #     type=res_type,
+        #     unit='GB',
+        #     volume=message['payload']['size'],
+        #     resource_id=resource_id,
+        #     message=info,
+        #     user_id=user_id,
+        #     project_id=tenant_id,
+        #     timestamp=timestamp,metadata=res_meta)
+        {"res_id": message["_context_request_id"],
+         "res_name": message["display_name"],
+         "res_meta": message['payload'],
+         "res_type": message['event_type'].split(".")[0],
+         "user_id": message['payload']['user_id'],
+         "region": self.region_name,
+         "message_id": message['message_id'],
+         "event_type": message['event_type']}
