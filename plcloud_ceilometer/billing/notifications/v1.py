@@ -79,7 +79,7 @@ class Volume(BillingBase):
         #     user_id=user_id,
         #     project_id=tenant_id,
         #     timestamp=timestamp,metadata=res_meta)
-        {"res_id": message["_context_request_id"],
+        return {"res_id": message["_context_request_id"],
          "res_name": message["payload"]["display_name"],
          "res_meta": message['payload'],
          "res_type": message['event_type'].split(".")[0],
