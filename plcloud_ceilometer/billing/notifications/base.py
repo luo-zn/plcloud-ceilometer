@@ -6,6 +6,7 @@ __author__ = "Jenner.luo"
 import oslo_messaging
 from oslo_log import log
 from ceilometer import service, messaging
+from ceilometer.i18n import _LE
 from ceilometer.agent import plugin_base
 from plcloud_ceilometer.clients.plcloudkitty import PLCloudkittyClient
 
