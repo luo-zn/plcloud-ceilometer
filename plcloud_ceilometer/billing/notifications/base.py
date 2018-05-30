@@ -59,16 +59,16 @@ class BillingBase(plugin_base.NotificationBase):
                 notification = messaging.convert_to_old_notification_format(
                     priority, notification)
                 notification = self.plcloudkitty_billing(notification)
-                if notification:
-                    self.to_samples_and_publish(notification)
+                self.to_samples_and_publish(notification)
             except Exception:
                 LOG.error(_LE('Fail to process notification'), exc_info=True)
 
     def plcloudkitty_billing(self, notification):
+        print 'plcloudkitty_billing notification', notification
         if self.need_to_handle(notification['event_type'], self.event_types):
-            event = self.process_notification(notification)
-            if event:
-                return self._create_billing(event)
+            sample = self.process_notification(notification)
+            if sample:
+                return self._create_billing(sample.as_dict())
         return []
 
     @staticmethod
@@ -91,12 +91,12 @@ class BillingBase(plugin_base.NotificationBase):
                 'payload': payload}
         return info
 
-    def _create_billing(self, notifications):
+    def _create_billing(self, sample_dict):
         try:
-            res = self.plcli.create_billing(notifications)
+            res = self.plcli.create_billing(sample_dict)
             LOG.info('Billing %s (%s, %s): %s',
-                     event['res_type'], event['res_name'], event['res_id'],
-                     res)
+                     sample_dict['res_type'], sample_dict['res_name'],
+                     sample_dict['res_id'],res)
             return res
         except Exception as error:
             LOG.error(error)
