@@ -70,7 +70,8 @@ class BillingBase(plugin_base.NotificationBase):
             sample = self.process_notification(notification)
             if sample:
                 if type(sample) is types.GeneratorType:
-                    sample = sample.as_dict()
+                    d = sample.next()
+                    sample = d.as_dict()
                 return self._create_billing(sample)
         return []
 
