@@ -2,3 +2,5 @@
 oslotest==3.4.2
 tox==3.0.0
 testtools==2.3.0
+
+oslo.config==3.22.0
