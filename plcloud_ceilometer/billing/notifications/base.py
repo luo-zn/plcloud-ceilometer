@@ -3,6 +3,7 @@
 """
 __author__ = "Jenner.luo"
 
+import fnmatch
 import oslo_messaging
 from oslo_log import log
 from ceilometer import service, messaging
