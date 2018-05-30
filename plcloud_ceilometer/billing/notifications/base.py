@@ -18,9 +18,9 @@ class BillingBase(plugin_base.NotificationBase):
 
     def __init__(self, manager):
         super(BillingBase, self).__init__(manager)
-        import pdb;pdb.set_trace()
         self.plcli = PLCloudkittyClient()
         print self.plcli.conf
+        print dir(plcli.conf)
 
     def get_targets(self, conf):
         """Return a sequence of oslo_messaging.Target
