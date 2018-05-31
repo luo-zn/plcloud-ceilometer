@@ -9,5 +9,5 @@ oslo.config==3.22.0
 python-ceilometerclient==2.8.1
 
 pygobject==3.28.2
-urlgrabber==3.10
+urlgrabber==3.10.2
 python-plcloudkittyclient
