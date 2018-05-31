@@ -74,6 +74,47 @@ class Instance(BillingBase):
                 'project_id': tenant_id}
 
 
+class Image(BillingBase):
+    event_types = [
+        "compute.instance.create.end",
+        "compute.instance.delete.end",
+    ]
+
+    def get_targets(self, conf):
+        """oslo.messaging.TargetS for this plugin."""
+        return [oslo_messaging.Target(topic=topic,
+                                      exchange=conf.glance_control_exchange)
+                for topic in self.get_notification_topics(conf)]
+
+    def process_notification(self, message):
+        LOG.debug(_('Image notification %r') % message)
+        user_id = message['payload']['user_id']
+        tenant_id = message['payload']['tenant_id']
+        res_id = '%s_%s' % (message['payload']['image_meta']['image_id'],
+                            message['payload']['instance_id'])
+        res_name = message['payload']['image_meta']['image_name']
+        res_type = 'image'
+        # same as the instance message_id
+        message_id = message['message_id']
+        timestamp = message['timestamp']
+        event_type = message['event_type']
+        res_meta = {
+            'architecture': message['payload']['image_meta']['architecture'],
+            'os_distro': message['payload']['image_meta']['os_distro'],
+            'os_version': message['payload']['image_meta']['os_version'],
+            'vol_size': message['payload']['image_meta']['vol_size'],
+            message['payload']['image_meta']['image_id']: 1}
+        return {'message_id': message_id,
+                'res_id': res_id,
+                'res_name': res_name,
+                'res_meta': res_meta,
+                'res_type': res_type,
+                'event_type': event_type,
+                'timestamp': timestamp,
+                'user_id': user_id,
+                'project_id': tenant_id}
+
+
 class Volume(BillingBase):
     event_types = [
         "volume.create.end",
