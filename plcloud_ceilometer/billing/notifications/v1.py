@@ -13,7 +13,14 @@ LOG = log.getLogger(__name__)
 
 
 class Instance(BillingBase):
-    event_types = ["compute.instance.*"]
+    event_types = [
+        "compute.instance.create.end",
+        "compute.instance.power_off.end",
+        "compute.instance.power_on.end",
+        "compute.instance.delete.end",
+        "compute.instance.resize.confirm.end",
+        "compute.instance.reboot.end",
+    ]
 
     def get_targets(self, conf):
         """oslo.messaging.TargetS for this plugin."""
