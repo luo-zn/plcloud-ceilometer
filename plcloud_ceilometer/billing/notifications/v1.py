@@ -167,3 +167,37 @@ class Volume(BillingBase):
                 'user_id': user_id,
                 "region": self.region_name,
                 'project_id': project_id}
+
+
+class Router(BillingBase):
+    event_types = [
+        "router.create.end",
+        "router.delete.end",
+    ]
+
+    def get_targets(self, conf):
+        """oslo.messaging.TargetS for this plugin."""
+        return [oslo_messaging.Target(topic=topic,
+                                      exchange=conf.neutron_control_exchange)
+                for topic in self.get_notification_topics(conf)]
+
+    def process_notification(self, message):
+        LOG.debug(_('Router notification %r') % message)
+        res_type = 'router'
+        message_id = message['message_id']
+        timestamp = message['timestamp']
+        user_id = message['context']['user_id']
+        tenant_id = message['payload']['tenant_id']
+        event_type = message['event_type']
+        res_meta = {'router': 1}
+        res_id = message['payload']['id']
+        res_name = message['payload']['name']
+        return {'message_id': message_id,
+                'res_id': res_id,
+                'res_name': res_name,
+                'res_meta': res_meta,
+                'res_type': res_type,
+                'event_type': event_type,
+                'timestamp': timestamp,
+                'user_id': user_id,
+                'project_id': tenant_id}
