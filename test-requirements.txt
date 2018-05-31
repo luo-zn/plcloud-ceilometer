@@ -6,3 +6,4 @@ testtools==2.3.0
 oslo.config==3.22.0
 -e git+https://github.com/openstack/ceilometer.git@8.1.1#egg=ceilometer
 python-ceilometerclient==2.8.1
+python-plcloudkittyclient
