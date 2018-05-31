@@ -201,3 +201,38 @@ class Router(BillingBase):
                 'timestamp': timestamp,
                 'user_id': user_id,
                 'project_id': tenant_id}
+
+
+class FloatingIP(BillingBase):
+    event_types = [
+        "floatingip.create.end",
+        "floatingip.delete.end",
+    ]
+
+    def get_targets(self, conf):
+        """oslo.messaging.TargetS for this plugin."""
+        return [oslo_messaging.Target(topic=topic,
+                                      exchange=conf.cinder_control_exchange)
+                for topic in self.get_notification_topics(conf)]
+
+    def process_notification(self, message):
+        LOG.debug(_('FloatingIp notification %r') % message)
+        event_type = message['event_type']
+        message_id = message['message_id']
+        timestamp = message['timestamp']
+        res_type = 'floatingip'
+        res_name = message['payload']['floating_ip_address']
+        res_meta = {'floatingip': 1}
+        res_id = message['payload']['id']
+        user_id = message['context']['user_id']
+        tenant_id = message['payload']['tenant_id']
+
+        return {'message_id': message_id,
+                'res_id': res_id,
+                'res_name': res_name,
+                'res_meta': res_meta,
+                'res_type': res_type,
+                'event_type': event_type,
+                'timestamp': timestamp,
+                'user_id': user_id,
+                'project_id': tenant_id}
