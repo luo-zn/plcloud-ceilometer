@@ -13,6 +13,7 @@ from . import fakes
 
 class TestPLClient(base.BaseTestCase):
     @mock.patch('plcloudkittyclient.client._get_endpoint', fakes.plck_client_get_endpoint)
+    @mock.patch('ceilometer.keystone_client.get_session', fakes.keystone_client_get_session)
     def setUp(self):
         super(TestPLClient, self).setUp()
         conf = service.prepare_service([], [])
