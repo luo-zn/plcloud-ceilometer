@@ -12,8 +12,10 @@ from . import fakes
 
 
 class TestPLClient(base.BaseTestCase):
-    @mock.patch('plcloudkittyclient.client._get_endpoint', fakes.plck_client_get_endpoint)
-    @mock.patch('ceilometer.keystone_client.get_session', fakes.keystone_client_get_session)
+    @mock.patch('plcloudkittyclient.client._get_endpoint',
+                fakes.plck_client_get_endpoint)
+    @mock.patch('ceilometer.keystone_client.get_session',
+                fakes.keystone_client_get_session)
     def setUp(self):
         super(TestPLClient, self).setUp()
         conf = service.prepare_service([], [])
@@ -22,13 +24,13 @@ class TestPLClient(base.BaseTestCase):
 
     @classmethod
     def fake_data_from_get_billing(cls):
-        return {"res_type":'compute.instance.end', "region":'RegionOne',
-                "billing_type": 1, "res_meta":{'id': 666}}
+        return {"res_type": 'compute.instance.end', "region": 'RegionOne',
+                "billing_type": 1, "res_meta": {'id': 666}}
 
     def test_get_billing(self):
         with mock.patch.object(
                 self.plclient.client.billings.billing_manager,
                 'get_billing', side_effect=self.fake_data_from_get_billing):
-             billings = self.plclient.get_billing()
+            billings = self.plclient.get_billing()
         for key in ['res_type', 'res_meta', 'region', 'billing_type']:
             self.assertIn(key, billings)
