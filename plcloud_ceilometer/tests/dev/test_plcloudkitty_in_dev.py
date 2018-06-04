@@ -14,7 +14,7 @@ from plcloudkittyclient.common import utils
 class TestPLClient(unittest.TestCase):
     def setUp(self):
         super(TestPLClient, self).setUp()
-        conf = service.prepare_service([], [])
+        conf = service.prepare_service()
         self.plclient = PLCloudkittyClient(conf)
 
     @classmethod

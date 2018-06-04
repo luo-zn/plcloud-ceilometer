@@ -22,12 +22,8 @@ class TestPLClient(base.BaseTestCase):
 
     @classmethod
     def fake_data_from_get_billing(cls):
-        a = mock.MagicMock()
-        a.res_type = 'compute.instance.end'
-        a.res_meta = {'id': 666}
-        a.region = 'RegionOne'
-        a.billing_type = 1
-        return a
+        return {"res_type":'compute.instance.end', "region":'RegionOne',
+                "billing_type": 1, "res_meta":{'id': 666}}
 
     def test_get_billing(self):
         with mock.patch.object(
