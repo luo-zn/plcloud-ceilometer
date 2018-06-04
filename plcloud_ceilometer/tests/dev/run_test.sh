@@ -1,4 +1,12 @@
 #! /bin/bash
 # Author: Zhennan.luo(Jenner)
 
-python -m unittest discover "$@"
+
+main(){
+if [[ "$#" == "0" ]];then
+    python -m unittest discover -p ${DEV_TEST_PATH}/*.py
+else
+    python -m unittest discover "$@"
+fi
+}
+main "$@"
