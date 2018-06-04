@@ -4,9 +4,9 @@
 
 main(){
 if [[ "$#" == "0" ]];then
-    python ${DEV_TEST_PATH}/test*.py
+    /usr/bin/python ${DEV_TEST_PATH}/test*.py
 else
-    python -m unittest discover "$@"
+    /usr/bin/python -m unittest discover "$@"
 fi
 }
 main "$@"
