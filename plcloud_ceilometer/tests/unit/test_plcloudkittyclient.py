@@ -5,6 +5,7 @@ __author__ = "Jenner.luo"
 
 import mock
 from oslotest import base
+from oslotest import mockpatch
 from oslo_config import fixture as fixture_config
 from ceilometer import service
 from plcloud_ceilometer.clients.plcloudkitty import PLCloudkittyClient
