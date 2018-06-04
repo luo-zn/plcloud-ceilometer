@@ -13,7 +13,8 @@ from plcloud_ceilometer.clients.plcloudkitty import PLCloudkittyClient
 class TestPLClient(base.BaseTestCase):
     def setUp(self):
         super(TestPLClient, self).setUp()
-        self.CONF = self.useFixture(fixture_config.Config()).conf
+        conf = service.prepare_service([], [])
+        self.CONF = self.useFixture(fixture_config.Config(conf)).conf
         self.plclient = PLCloudkittyClient(self.CONF)
 
     @classmethod
