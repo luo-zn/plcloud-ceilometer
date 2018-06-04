@@ -61,8 +61,9 @@ class PLCloudkittyClient(ClientBase):
     def initialize_client_hook(self):
         """Initialize a PLcloudkitty client object."""
         ks_session = keystone_client.get_session(self.conf)
-        kwargs = {"endpoint_type": "InternalURL", "region_name": "RegionOne"}
-        endpoint = plck_client._get_endpoint(ks_session,**kwargs)
+        # region_name = self.conf.service_credentials.region_name
+        # kwargs = {"region_name": region_name if region_name else "RegionOne"}
+        endpoint = plck_client._get_endpoint(ks_session)
         return plck_client.Client('1', endpoint, token=ks_session.get_token(),
         insecure=self.conf.service_credentials.insecure,
         cacert=getattr(self.conf.service_credentials, 'cacert', None))
