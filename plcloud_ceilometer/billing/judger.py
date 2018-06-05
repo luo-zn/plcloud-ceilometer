@@ -89,47 +89,47 @@ class Release(JudgerBase):
         except Exception as error:
             LOG.error(error)
 
-    def release_volume(self, res_id, billing_id, *args, **kwargs):
-        try:
-            self.cinderclient.delete_volume(res_id)
-        except cinder_exceptions.NotFound:
-            self.plcloudclient.billing_release(billing_id)
-        except Exception as error:
-            LOG.error(error)
-
-    def release_floatingip(self, res_id, billing_id, *args, **kwargs):
-        try:
-            self.neutronclient.release_ip(res_id)
-        except neutron_exceptions.NotFound:
-            self.plcloudclient.billing_release(billing_id)
-        except Exception as error:
-            LOG.error(error)
-
-    def release_router(self, res_id, billing_id, *args, **kwargs):
-        try:
-            self.neutronclient.delete_router(res_id)
-        except neutron_exceptions.NeutronClientException as error:
-            if error.status_code == 404:
-                self.plcloudclient.billing_release(billing_id)
-        except Exception as error:
-            LOG.error(error)
-
-    def release_bandwidth(self, res_id, billing_id, res_meta, *args, **kwargs):
-        try:
-            self.neutronclient.release_bandwidth(
-                res_id, res_meta['physical_network'])
-            port = self.neutronclient.get_port(res_id)
-            self.neutronclient.clear_gateway(port['device_id'])
-        except neutron_exceptions.PortNotFoundClient:
-            self.plcloudclient.billing_release(billing_id)
-        except Exception as error:
-            LOG.error(error)
-
-    def release_loadbalance(self, res_id, billing_id, *args, **kwargs):
-        try:
-            self.neutronclient.delete_lb(res_id)
-        except neutron_exceptions.NotFound:
-            self.plcloudclient.billing_release(billing_id)
-        except Exception as error:
-            LOG.error(error)
+    # def release_volume(self, res_id, billing_id, *args, **kwargs):
+    #     try:
+    #         self.cinderclient.delete_volume(res_id)
+    #     except cinder_exceptions.NotFound:
+    #         self.plcloudclient.billing_release(billing_id)
+    #     except Exception as error:
+    #         LOG.error(error)
+    #
+    # def release_floatingip(self, res_id, billing_id, *args, **kwargs):
+    #     try:
+    #         self.neutronclient.release_ip(res_id)
+    #     except neutron_exceptions.NotFound:
+    #         self.plcloudclient.billing_release(billing_id)
+    #     except Exception as error:
+    #         LOG.error(error)
+    #
+    # def release_router(self, res_id, billing_id, *args, **kwargs):
+    #     try:
+    #         self.neutronclient.delete_router(res_id)
+    #     except neutron_exceptions.NeutronClientException as error:
+    #         if error.status_code == 404:
+    #             self.plcloudclient.billing_release(billing_id)
+    #     except Exception as error:
+    #         LOG.error(error)
+    #
+    # def release_bandwidth(self, res_id, billing_id, res_meta, *args, **kwargs):
+    #     try:
+    #         self.neutronclient.release_bandwidth(
+    #             res_id, res_meta['physical_network'])
+    #         port = self.neutronclient.get_port(res_id)
+    #         self.neutronclient.clear_gateway(port['device_id'])
+    #     except neutron_exceptions.PortNotFoundClient:
+    #         self.plcloudclient.billing_release(billing_id)
+    #     except Exception as error:
+    #         LOG.error(error)
+    #
+    # def release_loadbalance(self, res_id, billing_id, *args, **kwargs):
+    #     try:
+    #         self.neutronclient.delete_lb(res_id)
+    #     except neutron_exceptions.NotFound:
+    #         self.plcloudclient.billing_release(billing_id)
+    #     except Exception as error:
+    #         LOG.error(error)
 
