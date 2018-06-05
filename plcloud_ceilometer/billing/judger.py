@@ -9,6 +9,8 @@ from novaclient import exceptions as nova_exceptions
 from cinderclient import exceptions as cinder_exceptions
 from . import EventNotificationBase
 from ..clients.nova import NovaClient
+from ..clients.neutron import NeutronClient
+from ..clients.cinder import CinderClient
 
 LOG = log.getLogger(__name__)
 
@@ -18,9 +20,8 @@ class JudgerBase(EventNotificationBase):
         super(JudgerBase, self).__init__(manager)
         self.hook_method = self.judging
         self.novaclient = NovaClient(manager)
-        # self.neutronclient = client.NeutronClient()
-        # self.cinderclient = client.CinderClient()
-        # self.plcloudclient = client.PlcloudClient()
+        self.neutronclient = client.NeutronClient()
+        self.cinderclient = client.CinderClient()
 
     def get_targets(self, conf):
         """oslo.messaging.TargetS for this plugin."""
