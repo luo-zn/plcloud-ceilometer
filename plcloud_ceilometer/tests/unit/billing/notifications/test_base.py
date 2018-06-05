@@ -68,5 +68,6 @@ class TestBillingBase(base.BaseTestCase):
         }
         print dir(plugin.plcloudkitty_billing)
         plugin.plcloudkitty_billing.assert_called_with(notification)
+        plugin.plcloudkitty_billing.assert_called_once_with(notification)
 
 
