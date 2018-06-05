@@ -3,6 +3,7 @@
 """
 __author__ = "Jenner.luo"
 
+import functools
 from oslo_log import log
 from oslo_config import cfg
 from neutronclient.common import exceptions
@@ -11,6 +12,22 @@ from ceilometer import keystone_client
 from . import ClientBase
 
 LOG = log.getLogger(__name__)
+
+
+def logged(func):
+    @functools.wraps(func)
+    def with_logging(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except exceptions.NeutronClientException as e:
+            if e.status_code == 404:
+                LOG.warning("The resource could not be found.")
+            else:
+                LOG.warning(e)
+            return []
+        except Exception as e:
+            LOG.exception(e)
+            raise
 
 
 class NeutronClient(ClientBase):
@@ -29,14 +46,18 @@ class NeutronClient(ClientBase):
         }
         return clientv20.Client(**params)
 
+    @logged
     def get_all_ports(self):
         return self.client.list_ports().get('ports')
 
+    @logged
     def get_port(self, port_id):
         return self.client.show_port(port_id).get('port')
 
+    @logged
     def get_router(self, router_id):
         return self.client.show_router(router_id)
 
+    @logged
     def release_ip(self, floating_ip_id):
         self.client.delete_floatingip(floating_ip_id)
