@@ -14,6 +14,12 @@ class TestBillingBase(base.BaseTestCase):
         super(TestBillingBase, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
 
+    @property
+    def fake_manager(self):
+        manager = mock.Mock()
+        manager.conf = self.CONF
+        return manager
+
     class FakeBillingBase(plugin_base.BillingBase):
         event_types = ['compute.*']
 
@@ -24,7 +30,7 @@ class TestBillingBase(base.BaseTestCase):
             pass
 
     def test_plugin_info(self):
-        plugin = self.FakeBillingBase(mock.Mock())
+        plugin = self.FakeBillingBase(self.fake_manager)
         plugin.to_samples_and_publish = mock.Mock()
         message = {
             'ctxt': {'user_id': 'fake_user_id',
