@@ -21,7 +21,7 @@ class TestNovaClient(base.BaseTestCase):
     def fake_servers_list(cls, *args, **kwargs):
         a = mock.MagicMock()
         a.id = 42
-        a.name = "host-{}".format(b.id)
+        a.name = "host-{}".format(a.id)
         a.user_id = '914947b388194de8ad1e9e2f7123bb78'
         a.addresses = {
             'demo-net': [{'OS-EXT-IPS-MAC:mac_addr': 'fa:16:3e:b8:b3:50',
