@@ -13,6 +13,7 @@ class JudgerBase(EventNotificationBase):
 
     def __init__(self, manager):
         super(JudgerBase, self).__init__(manager)
+        self.hook_method = self.judging
         # self.novaclient = client.NovaClient()
         # self.neutronclient = client.NeutronClient()
         # self.cinderclient = client.CinderClient()
@@ -24,10 +25,9 @@ class JudgerBase(EventNotificationBase):
                                       exchange=conf.keystone_control_exchange)
                 for topic in self.get_notification_topics(conf)]
 
-    # def _process_notifications(self, priority, notifications):
-    #     pass
-    # def judging(self, notification):
-    #     # if not cfg.CONF.plcloud.enable_judger:
-    #     #     LOG.info('Oh, oh! Judger is disabled.')
-    #     #     return
-    #     if self.need_to_handle(notification['event_type'], self.event_types):
+    def judging(self, notification):
+        # if not cfg.CONF.plcloud.enable_judger:
+        #     LOG.info('Oh, oh! Judger is disabled.')
+        #     return
+        if self.need_to_handle(notification['event_type'], self.event_types):
+            pass
