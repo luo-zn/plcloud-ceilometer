@@ -11,7 +11,6 @@ from novaclient import client as nova_client
 from ceilometer import keystone_client
 from . import ClientBase
 
-
 LOG = log.getLogger(__name__)
 
 
@@ -42,11 +41,10 @@ class NovaClient(ClientBase):
     def get_instance(self, instance_id):
         inst = self.client.servers.get(instance_id)
         addresses = [i['addr'] for i in chain(*inst.addresses.values())]
-        return {
-            'addresses': addresses,
-            'user_id': inst.user_id,
-            'instance_name': inst.name
-        }
+        return {'id': inst.id, 'addresses': addresses,
+                'user_id': inst.user_id,
+                'instance_name': inst.name
+                }
 
     def get_all_instance(self):
         search_opts = {'all_tenants': True}
