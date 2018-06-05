@@ -28,10 +28,10 @@ class JudgerBase(EventNotificationBase):
     @abc.abstractmethod
     def process_notification(self, message):
         pass
-    
+
     def judging(self, notification):
         # if not cfg.CONF.plcloud.enable_judger:
         #     LOG.info('Oh, oh! Judger is disabled.')
         #     return
         if self.need_to_handle(notification['event_type'], self.event_types):
-            pass
+            return self.process_notification(notification)
