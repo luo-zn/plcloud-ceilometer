@@ -3,11 +3,13 @@
 """
 __author__ = "Jenner.luo"
 
-from oslotest import base
+import mock
+from plcloud_ceilometer.tests.unit import fakes
+from . import TestBase
 from plcloud_ceilometer.billing.notifications import v1
 
 
-class TestInstance(base.BaseTestCase):
+class TestInstance(TestBase):
     @property
     def message(self):
         return {u'_context_domain': None,
@@ -77,13 +79,20 @@ class TestInstance(base.BaseTestCase):
                 u'_context_user_name': u'admin',
                 u'_context_remote_address': u'10.0.1.16'}
 
+    @mock.patch('plcloudkittyclient.client._get_endpoint',
+                fakes.plck_client_get_endpoint)
+    @mock.patch('ceilometer.keystone_client.get_session',
+                fakes.keystone_client_get_session)
     def test_process_notification(self):
-        sample_creation = v1.Instance(None)
+        sample_creation = v1.Instance(self.fake_manager)
         sample = sample_creation.process_notification(self.message)
         self.assertEqual(sample['user_id'], self.message['payload']['user_id'])
-        self.assertEqual(sample['project_id'], self.message['payload']['tenant_id'])
-        self.assertEqual(sample['res_id'], self.message['payload']['instance_id'])
-        self.assertEqual(sample['res_name'], self.message['payload']['display_name'])
+        self.assertEqual(sample['project_id'],
+                         self.message['payload']['tenant_id'])
+        self.assertEqual(sample['res_id'],
+                         self.message['payload']['instance_id'])
+        self.assertEqual(sample['res_name'],
+                         self.message['payload']['display_name'])
         self.assertEqual(sample['event_type'], self.message['event_type'])
         self.assertEqual(sample['timestamp'], self.message['timestamp'])
         self.assertEqual(sample['res_type'], 'instance')
