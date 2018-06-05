@@ -11,7 +11,7 @@ from plcloud_ceilometer.billing.notifications import base as plugin_base
 
 class TestBillingBase(base.BaseTestCase):
     def setUp(self):
-        super(TestBillingBase, self).setUP()
+        super(TestBillingBase, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
 
         class FakeBillingBase(plugin_base.BillingBase):
