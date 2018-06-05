@@ -5,7 +5,7 @@ __author__ = "Jenner.luo"
 
 import mock
 from oslotest import base
-from oslo_config import fixture as fixture_config
+from oslo_config import fixture as fixture_config, cfg
 from plcloud_ceilometer.billing.notifications import base as plugin_base
 
 
@@ -17,7 +17,9 @@ class TestBillingBase(base.BaseTestCase):
 
     def register_service_credentials(self):
         group = "service_credentials"
-        self.CONF.set_override('region_name', 'FakeRegion', group)
+        self.CONF.register_opts([cfg.StrOpt(
+            'region_name', default="FakeRegion",help="Fake Region Name")],
+            group=group)
 
     @property
     def fake_manager(self):
