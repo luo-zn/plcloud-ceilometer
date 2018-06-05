@@ -3,11 +3,12 @@
 """
 __author__ = "Jenner.luo"
 
-
 from oslo_log import log
 from oslo_config import cfg
+from neutronclient.common import exceptions
+from neutronclient.v2_0 import client as clientv20
+from ceilometer import keystone_client
 from . import ClientBase
-from ceilometer import neutron_client
 
 LOG = log.getLogger(__name__)
 
@@ -15,10 +16,18 @@ LOG = log.getLogger(__name__)
 class NeutronClient(ClientBase):
     def __init__(self, conf=None):
         super(NeutronClient, self).__init__(conf)
+        self.lb_version = self.conf.service_types.neutron_lbaas_version
 
     def initialize_client_hook(self):
         """Initialize a Neutron client object."""
-        return neutron_client.Client(self.conf)
+        creds = self.conf.service_credentials
+        params = {
+            'session': keystone_client.get_session(self.conf),
+            'endpoint_type': creds.interface,
+            'region_name': creds.region_name,
+            'service_type': self.conf.service_types.neutron,
+        }
+        return clientv20.Client(**params)
 
     def get_port(self, port_id):
         return self.client.show_port(port_id).get('port')
