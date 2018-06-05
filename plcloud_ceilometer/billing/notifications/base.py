@@ -29,21 +29,6 @@ class BillingBase(EventNotificationBase):
         :param message: Message to process.
         """
 
-    # def _process_notifications(self, priority, notifications):
-    #     """ Overwrite this method. Change call to plcloudkitty_billing method.
-    #     :param priority:
-    #     :param notifications:
-    #     :return:
-    #     """
-    #     for notification in notifications:
-    #         try:
-    #             notification = messaging.convert_to_old_notification_format(
-    #                 priority, notification)
-    #             self.plcloudkitty_billing(notification)
-    #             # self.to_samples_and_publish(notification)
-    #         except Exception:
-    #             LOG.error(_LE('Fail to process notification'), exc_info=True)
-
     def plcloudkitty_billing(self, notification):
         print 'plcloudkitty_billing notification', notification
         if self.need_to_handle(notification['event_type'], self.event_types):
