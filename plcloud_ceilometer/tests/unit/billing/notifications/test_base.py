@@ -79,7 +79,7 @@ class TestBillingBase(base.BaseTestCase):
         plugin.info([self.fake_message])
 
         plugin._process_notifications.assert_called_once_with(
-            'info', self.fake_notification)
+            'info', [self.fake_notification])
         #plugin.plcloudkitty_billing.assert_called_with(self.fake_notification)
         plugin.plcloudkitty_billing.assert_called_once_with(self.fake_notification)
         plugin.need_to_handle.assert_called_once_with(
