@@ -7,9 +7,12 @@ import mock
 from oslo_config import fixture as fixture_config
 from oslotest import base
 from plcloud_ceilometer.clients.neutron import NeutronClient
+from . import fakes
 
 
 class TestNeutronClient(base.BaseTestCase):
+    @mock.patch('ceilometer.keystone_client.get_session',
+                fakes.keystone_client_get_session)
     def setUp(self):
         super(TestNeutronClient, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
