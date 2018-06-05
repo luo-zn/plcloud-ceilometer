@@ -21,3 +21,11 @@ class TestBillingBase(TestBase):
         plugin.info([self.fake_message])
         plugin._process_notifications.assert_called_once_with(
             'info', [self.fake_message])
+
+    @mock.patch('plcloudkittyclient.client._get_endpoint',
+                fakes.plck_client_get_endpoint)
+    @mock.patch('ceilometer.keystone_client.get_session',
+                fakes.keystone_client_get_session)
+    def test_hook_method(self):
+        plugin = FakeBillingBase(self.fake_manager)
+        print callable(plugin.hook_method)
