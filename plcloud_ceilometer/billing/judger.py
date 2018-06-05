@@ -3,6 +3,7 @@
 """
 __author__ = "Jenner.luo"
 
+import abc
 from oslo_log import log
 from . import EventNotificationBase
 
@@ -10,7 +11,6 @@ LOG = log.getLogger(__name__)
 
 
 class JudgerBase(EventNotificationBase):
-
     def __init__(self, manager):
         super(JudgerBase, self).__init__(manager)
         self.hook_method = self.judging
@@ -25,6 +25,10 @@ class JudgerBase(EventNotificationBase):
                                       exchange=conf.keystone_control_exchange)
                 for topic in self.get_notification_topics(conf)]
 
+    @abc.abstractmethod
+    def process_notification(self, message):
+        pass
+    
     def judging(self, notification):
         # if not cfg.CONF.plcloud.enable_judger:
         #     LOG.info('Oh, oh! Judger is disabled.')
