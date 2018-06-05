@@ -5,6 +5,8 @@ __author__ = "Jenner.luo"
 
 import abc
 from oslo_log import log
+from novaclient import exceptions as nova_exceptions
+from cinderclient import exceptions as cinder_exceptions
 from . import EventNotificationBase
 from ..clients.nova import NovaClient
 
@@ -46,9 +48,10 @@ class Stop(JudgerBase):
         res_id = message['payload']['res_id']
         stop_method = getattr(self, "stop_{}".format(res_type), None)
         if stop_method:
-            stop_method(res_id,message['payload']['res_name'],res_type)
+            stop_method(res_id, message['payload']['res_name'], res_type)
         else:
-            LOG.error('Stop class does not implement %s method.', stop_method)
+            LOG.error('Stop class does not implement %s method.',
+                      stop_method)
 
     def stop_instance(self, res_id, res_name, res_type):
         LOG.info('Judge %s, stop (%s, %s).',
@@ -57,4 +60,40 @@ class Stop(JudgerBase):
             self.novaclient.stop(res_id)
         except Exception as error:
             LOG.error(error)
+
+
+class Release(JudgerBase):
+    event_types = [
+        "plcloudkitty.billing.release"
+    ]
+
+    def process_notification(self, message):
+        LOG.debug('Judger release notification %s', message)
+        res_type = message['payload']['res_type']
+        res_id = message['payload']['res_id']
+        res_meta = message['payload']['res_meta']
+        billing_id = message['payload']['id']
+        release_method = getattr(self, "release_{}".format(res_type), None)
+        if release_method:
+            release_method(res_id, billing_id)
+        else:
+            LOG.error('Release class does not implement %s method.',
+                      stop_method)
+
+    def release_instance(self, res_id, billing_id):
+        try:
+            self.novaclient.delete(res_id)
+        except nova_exceptions.NotFound:
+            self.plcloudclient.billing_release(billing_id)
+        except Exception as error:
+            LOG.error(error)
+
+    def release_volume(self, res_id, billing_id):
+        try:
+            self.cinderclient.delete_volume(res_id)
+        except cinder_exceptions.NotFound:
+            self.plcloudclient.billing_release(billing_id)
+        except Exception as error:
+            LOG.error(error)
+
 
