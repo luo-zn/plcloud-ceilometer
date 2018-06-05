@@ -22,17 +22,17 @@ class NovaClient(ClientBase):
         """Initialize a Nova client object."""
         creds = self.conf.service_credentials
         logger = None
-        if conf.nova_http_log_debug:
+        if self.conf.nova_http_log_debug:
             logger = log.getLogger("novaclient-debug")
             logger.logger.setLevel(log.DEBUG)
-        ks_session = keystone_client.get_session(conf)
+        ks_session = keystone_client.get_session(self.conf)
         return nova_client.Client(
             version=api_versions.APIVersion('2.1'),
             session=ks_session,
             # nova adapter options
             region_name=creds.region_name,
             endpoint_type=creds.interface,
-            service_type=conf.service_types.nova,
+            service_type=self.conf.service_types.nova,
             logger=logger)
 
     def create_image(self, instance_id, name):
