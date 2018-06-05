@@ -6,7 +6,6 @@ __author__ = "Jenner.luo"
 import mock
 from oslotest import base
 from oslo_config import fixture as fixture_config, cfg
-from ceilometer import messaging
 from plcloud_ceilometer.billing.notifications import base as plugin_base
 from plcloud_ceilometer.tests.unit import fakes
 
@@ -64,10 +63,6 @@ class TestBillingBase(base.BaseTestCase):
             'message_id': '3577a84f-29ec-4904-9566-12c52289c2e8'
         }
 
-    def convert_to_old_notification_format(self, priority, notification):
-        return messaging.convert_to_old_notification_format(
-                    priority, notification)
-
     @mock.patch('plcloudkittyclient.client._get_endpoint',
                 fakes.plck_client_get_endpoint)
     @mock.patch('ceilometer.keystone_client.get_session',
@@ -84,8 +79,7 @@ class TestBillingBase(base.BaseTestCase):
         plugin.info([self.fake_message])
 
         plugin._process_notifications.assert_called_once_with(
-            'info', [self.convert_to_old_notification_format(
-                'info', self.fake_message)])
+            'info', [self.fake_message])
         #plugin.plcloudkitty_billing.assert_called_with(self.fake_notification)
         plugin.plcloudkitty_billing.assert_called_once_with(self.fake_notification)
         plugin.need_to_handle.assert_called_once_with(
