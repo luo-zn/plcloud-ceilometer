@@ -20,7 +20,7 @@ class NovaClient(ClientBase):
 
     def initialize_client_hook(self):
         """Initialize a Nova client object."""
-        creds = conf.service_credentials
+        creds = self.conf.service_credentials
         logger = None
         if conf.nova_http_log_debug:
             logger = log.getLogger("novaclient-debug")
