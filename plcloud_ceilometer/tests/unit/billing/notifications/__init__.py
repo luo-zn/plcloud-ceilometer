@@ -21,7 +21,7 @@ class FakeBillingBase(plugin_base.BillingBase):
 
 class TestBase(base.BaseTestCase):
     def setUp(self):
-        super(TestBillingBase, self).setUp()
+        super(TestBase, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
         self.register_service_credentials()
 
