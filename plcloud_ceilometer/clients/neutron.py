@@ -29,14 +29,14 @@ class NeutronClient(ClientBase):
         }
         return clientv20.Client(**params)
 
+    def get_all_ports(self):
+        return self.client.list_ports().get('ports')
+
     def get_port(self, port_id):
         return self.client.show_port(port_id).get('port')
 
     def get_router(self, router_id):
         return self.client.show_router(router_id)
-
-    def list_ports(self, device_id):
-        return self.client.list_ports(device_id=device_id).get('ports')
 
     def release_ip(self, floating_ip_id):
         self.client.delete_floatingip(floating_ip_id)
