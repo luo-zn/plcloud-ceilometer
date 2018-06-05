@@ -41,10 +41,8 @@ class NovaClient(ClientBase):
     def get_instance(self, instance_id):
         inst = self.client.servers.get(instance_id)
         addresses = [i['addr'] for i in chain(*inst.addresses.values())]
-        return {'id': inst.id, 'addresses': addresses,
-                'user_id': inst.user_id,
-                'instance_name': inst.name
-                }
+        inst.ips = addresses
+        return inst
 
     def get_all_instance(self):
         search_opts = {'all_tenants': True}

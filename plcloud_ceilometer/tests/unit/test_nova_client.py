@@ -59,6 +59,8 @@ class TestNovaClient(base.BaseTestCase):
         with mock.patch.object(self.nvc.client.servers, 'get',
                                side_effect=self.fake_servers_get):
             instance = self.nvc.get_instance(42)
-            self.assertEqual(42, instance.id)
-            self.assertEqual(1, instance.flavor['id'])
-            self.assertEqual(1, instance.image['id'])
+        self.assertEqual(42, instance.id)
+        self.assertEqual('host-42', instance.name)
+        self.assertEqual(['10.0.0.9'], instance.ips)
+        self.assertEqual(1, instance.flavor['id'])
+        self.assertEqual(1, instance.image['id'])
