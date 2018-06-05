@@ -62,7 +62,7 @@ class BillingBase(plugin_base.NotificationBase):
         """
 
     def _process_notifications(self, priority, notifications):
-        """ #Overwrite this method. Change call to plcloudkitty_billing method.
+        """ Overwrite this method. Change call to plcloudkitty_billing method.
         :param priority:
         :param notifications:
         :return:
