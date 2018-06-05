@@ -21,8 +21,7 @@ class TestBillingBase(base.BaseTestCase):
         self.CONF.register_opts([cfg.StrOpt(
             'region_name', default="FakeRegion",help="Fake Region Name"),
             cfg.BoolOpt('insecure', default=False, help="Fake insecure"),
-        ],
-            group=group)
+        ],group=group)
 
     @property
     def fake_manager(self):
