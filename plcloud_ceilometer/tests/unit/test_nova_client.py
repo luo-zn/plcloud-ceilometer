@@ -29,6 +29,11 @@ class TestNovaClient(base.BaseTestCase):
         b.image = {'id': 2}
         return [a, b]
 
+    @classmethod
+    def fake_servers_get(cls, instance_id):
+        return filter(lambda a: a.id == instance_id,
+                      cls.fake_servers_list())[0]
+
     def test_get_all_instance(self):
         with mock.patch.object(self.nvc.client.servers, 'list',
                                side_effect=self.fake_servers_list):
@@ -37,3 +42,11 @@ class TestNovaClient(base.BaseTestCase):
         self.assertEqual(42, instances[0].id)
         self.assertEqual(1, instances[0].flavor['id'])
         self.assertEqual(1, instances[0].image['id'])
+
+    def test_get_instance(self):
+        with mock.patch.object(self.nvc.client.servers, 'get',
+                               side_effect=self.fake_servers_get):
+            instance = self.nvc.get_instance(42)
+            self.assertEqual(42, instance.id)
+            self.assertEqual(1, instance.flavor['id'])
+            self.assertEqual(1, instance.image['id'])
