@@ -16,19 +16,6 @@ class TestBillingBase(base.BaseTestCase):
         self.CONF = self.useFixture(fixture_config.Config()).conf
         self.register_service_credentials()
 
-    def register_service_credentials(self):
-        group = "service_credentials"
-        self.CONF.register_opts([cfg.StrOpt(
-            'region_name', default="FakeRegion",help="Fake Region Name"),
-            cfg.BoolOpt('insecure', default=False, help="Fake insecure"),
-        ],group=group)
-
-    @property
-    def fake_manager(self):
-        manager = mock.Mock()
-        manager.conf = self.CONF
-        return manager
-
     class FakeBillingBase(plugin_base.BillingBase):
         event_types = ['compute.*']
 
@@ -38,15 +25,22 @@ class TestBillingBase(base.BaseTestCase):
         def plcloudkitty_billing(self, notification):
             pass
 
-    @mock.patch('plcloudkittyclient.client._get_endpoint',
-                fakes.plck_client_get_endpoint)
-    @mock.patch('ceilometer.keystone_client.get_session',
-                fakes.keystone_client_get_session)
-    def test_plugin_info(self):
-        plugin = self.FakeBillingBase(self.fake_manager)
-        # plugin.to_samples_and_publish = mock.Mock()
-        plugin.plcloudkitty_billing = mock.Mock()
-        message = {
+    def register_service_credentials(self):
+        group = "service_credentials"
+        self.CONF.register_opts([cfg.StrOpt(
+            'region_name', default="FakeRegion", help="Fake Region Name"),
+            cfg.BoolOpt('insecure', default=False, help="Fake insecure"),
+        ], group=group)
+
+    @property
+    def fake_manager(self):
+        manager = mock.Mock()
+        manager.conf = self.CONF
+        return manager
+
+    @property
+    def fake_message(self):
+        return {
             'ctxt': {'user_id': 'fake_user_id',
                      'project_id': 'fake_project_id'},
             'publisher_id': 'fake.publisher_id',
@@ -55,8 +49,10 @@ class TestBillingBase(base.BaseTestCase):
             'metadata': {'message_id': '3577a84f-29ec-4904-9566-12c52289c2e8',
                          'timestamp': '2015-06-1909:19:35.786893'}
         }
-        plugin.info([message])
-        notification = {
+
+    @property
+    def fake_notification(self):
+        return {
             'priority': 'info',
             'event_type': 'fake.event',
             'timestamp': '2015-06-1909:19:35.786893',
@@ -66,8 +62,28 @@ class TestBillingBase(base.BaseTestCase):
             'payload': {'foo': 'bar'},
             'message_id': '3577a84f-29ec-4904-9566-12c52289c2e8'
         }
-        print dir(plugin.plcloudkitty_billing)
-        plugin.plcloudkitty_billing.assert_called_with(notification)
-        plugin.plcloudkitty_billing.assert_called_once_with(notification)
 
+    @mock.patch('plcloudkittyclient.client._get_endpoint',
+                fakes.plck_client_get_endpoint)
+    @mock.patch('ceilometer.keystone_client.get_session',
+                fakes.keystone_client_get_session)
+    def test_plcloudkitty_billing(self):
+        plugin = self.FakeBillingBase(self.fake_manager)
+        # plugin.to_samples_and_publish = mock.Mock()
+        plugin._process_notifications = mock.Mock()
+        plugin.plcloudkitty_billing = mock.Mock()
+        plugin.need_to_handle = mock.Mock()
+        plugin.process_notification = mock.Mock()
+        plugin._create_billing = mock.Mock()
+
+        plugin.info([self.fake_message])
+
+        plugin._process_notifications.assert_called_once_with(
+            'info', self.fake_notification)
+        #plugin.plcloudkitty_billing.assert_called_with(self.fake_notification)
+        plugin.plcloudkitty_billing.assert_called_once_with(self.fake_notification)
+        plugin.need_to_handle.assert_called_once_with(
+            self.fake_notification['event_type'], self.plugin.event_types)
+        plugin.process_notification.assert_called_once_with(self.fake_notification)
+        plugin._create_billing.assert_called_once_with(self.fake_notification)
 
