@@ -67,23 +67,12 @@ class TestBillingBase(base.BaseTestCase):
                 fakes.plck_client_get_endpoint)
     @mock.patch('ceilometer.keystone_client.get_session',
                 fakes.keystone_client_get_session)
-    def test_plcloudkitty_billing(self):
+    def test__process_notifications(self):
         plugin = self.FakeBillingBase(self.fake_manager)
         # plugin.to_samples_and_publish = mock.Mock()
         plugin._process_notifications = mock.Mock()
-        plugin.plcloudkitty_billing = mock.Mock()
-        plugin.need_to_handle = mock.Mock()
-        plugin.process_notification = mock.Mock()
-        plugin._create_billing = mock.Mock()
 
         plugin.info([self.fake_message])
-
         plugin._process_notifications.assert_called_once_with(
             'info', [self.fake_message])
-        #plugin.plcloudkitty_billing.assert_called_with(self.fake_notification)
-        plugin.plcloudkitty_billing.assert_called_once_with(self.fake_notification)
-        plugin.need_to_handle.assert_called_once_with(
-            self.fake_notification['event_type'], self.plugin.event_types)
-        plugin.process_notification.assert_called_once_with(self.fake_notification)
-        plugin._create_billing.assert_called_once_with(self.fake_notification)
 
