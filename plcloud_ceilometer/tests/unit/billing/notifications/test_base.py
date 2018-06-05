@@ -44,7 +44,8 @@ class TestBillingBase(base.BaseTestCase):
                 fakes.keystone_client_get_session)
     def test_plugin_info(self):
         plugin = self.FakeBillingBase(self.fake_manager)
-        plugin.to_samples_and_publish = mock.Mock()
+        # plugin.to_samples_and_publish = mock.Mock()
+        plugin.plcloudkitty_billing = mock.Mock()
         message = {
             'ctxt': {'user_id': 'fake_user_id',
                      'project_id': 'fake_project_id'},
@@ -65,7 +66,7 @@ class TestBillingBase(base.BaseTestCase):
             'payload': {'foo': 'bar'},
             'message_id': '3577a84f-29ec-4904-9566-12c52289c2e8'
         }
-        print dir(plugin.to_samples_and_publish)
-        plugin.to_samples_and_publish.assert_called_with(notification)
+        print dir(plugin.plcloudkitty_billing)
+        plugin.plcloudkitty_billing.assert_called_with(notification)
 
 
