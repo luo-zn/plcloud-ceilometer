@@ -3,6 +3,7 @@
 """
 __author__ = "Jenner.luo"
 
+from itertools import chain
 from oslo_log import log
 from oslo_config import cfg
 from novaclient import api_versions
