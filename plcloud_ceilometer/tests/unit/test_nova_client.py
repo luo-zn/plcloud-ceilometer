@@ -18,7 +18,7 @@ class TestNovaClient(base.BaseTestCase):
         self.nvc = NovaClient(self.CONF)
 
     @classmethod
-    def fake_servers_list(cls):
+    def fake_servers_list(cls,*args, **kwargs):
         a = mock.MagicMock()
         a.id = 42
         a.flavor = {'id': 1}
