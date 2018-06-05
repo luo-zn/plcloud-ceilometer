@@ -6,6 +6,7 @@ __author__ = "Jenner.luo"
 import abc
 from oslo_log import log
 from . import EventNotificationBase
+from ..clients.nova import NovaClient
 
 LOG = log.getLogger(__name__)
 
@@ -14,7 +15,7 @@ class JudgerBase(EventNotificationBase):
     def __init__(self, manager):
         super(JudgerBase, self).__init__(manager)
         self.hook_method = self.judging
-        # self.novaclient = client.NovaClient()
+        self.novaclient = NovaClient(manager)
         # self.neutronclient = client.NeutronClient()
         # self.cinderclient = client.CinderClient()
         # self.plcloudclient = client.PlcloudClient()
