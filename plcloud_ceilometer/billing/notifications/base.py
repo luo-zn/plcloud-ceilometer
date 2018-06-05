@@ -3,6 +3,7 @@
 """
 __author__ = "Jenner.luo"
 
+import abc
 import types
 import fnmatch
 import oslo_messaging
