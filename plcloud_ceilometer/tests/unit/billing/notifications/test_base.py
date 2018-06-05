@@ -19,7 +19,9 @@ class TestBillingBase(base.BaseTestCase):
     def register_service_credentials(self):
         group = "service_credentials"
         self.CONF.register_opts([cfg.StrOpt(
-            'region_name', default="FakeRegion",help="Fake Region Name")],
+            'region_name', default="FakeRegion",help="Fake Region Name"),
+            cfg.BoolOpt('insecure', default=False, help="Fake insecure"),
+        ],
             group=group)
 
     @property
