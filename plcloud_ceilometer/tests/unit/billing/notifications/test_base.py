@@ -13,6 +13,15 @@ class TestBillingBase(TestBase):
                 fakes.plck_client_get_endpoint)
     @mock.patch('ceilometer.keystone_client.get_session',
                 fakes.keystone_client_get_session)
+    def test_hook_method(self):
+        plugin = FakeBillingBase(self.fake_manager)
+        self.assertTrue(callable(plugin.hook_method))
+        self.assertEqual(plugin.hook_method, plugin.plcloudkitty_billing)
+
+    @mock.patch('plcloudkittyclient.client._get_endpoint',
+                fakes.plck_client_get_endpoint)
+    @mock.patch('ceilometer.keystone_client.get_session',
+                fakes.keystone_client_get_session)
     def test__process_notifications(self):
         plugin = FakeBillingBase(self.fake_manager)
         # plugin.to_samples_and_publish = mock.Mock()
@@ -21,11 +30,3 @@ class TestBillingBase(TestBase):
         plugin.info([self.fake_message])
         plugin._process_notifications.assert_called_once_with(
             'info', [self.fake_message])
-
-    @mock.patch('plcloudkittyclient.client._get_endpoint',
-                fakes.plck_client_get_endpoint)
-    @mock.patch('ceilometer.keystone_client.get_session',
-                fakes.keystone_client_get_session)
-    def test_hook_method(self):
-        plugin = FakeBillingBase(self.fake_manager)
-        print callable(plugin.hook_method)
