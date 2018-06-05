@@ -30,8 +30,30 @@ class JudgerBase(EventNotificationBase):
         pass
 
     def judging(self, notification):
-        # if not cfg.CONF.plcloud.enable_judger:
-        #     LOG.info('Oh, oh! Judger is disabled.')
-        #     return
         if self.need_to_handle(notification['event_type'], self.event_types):
             return self.process_notification(notification)
+
+
+class Stop(JudgerBase):
+    event_types = [
+        "plcloudkitty.billing.stop"
+    ]
+
+    def process_notification(self, message):
+        LOG.debug('Judger stop notification %s', message)
+        res_type = message['payload']['res_type']
+        res_id = message['payload']['res_id']
+        stop_method = getattr(self, "stop_{}".format(res_type), None)
+        if stop_method:
+            stop_method(res_id,message['payload']['res_name'],res_type)
+        else:
+            LOG.error('Stop class does not implement %s method.', stop_method)
+
+    def stop_instance(self, res_id, res_name, res_type):
+        LOG.info('Judge %s, stop (%s, %s).',
+                 res_type, res_name, res_id)
+        try:
+            self.novaclient.stop(res_id)
+        except Exception as error:
+            LOG.error(error)
+
