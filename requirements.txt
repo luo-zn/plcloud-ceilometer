@@ -1,0 +1,10 @@
+--extra-index-url http://192.168.215.53:9001/simple/ --trusted-host 192.168.215.53
+
+oslo.serialization>=1.10.0 # Apache-2.0
+oslo.config==3.22.0
+-e git+https://github.com/openstack/ceilometer.git@8.1.1#egg=ceilometer
+python-ceilometerclient==2.8.1
+python-novaclient==7.1.2
+python-cinderclient==1.11.0
+
+python-plcloudkittyclient
