@@ -28,12 +28,14 @@ class TestNeutronClient(base.BaseTestCase):
                 'public', 'internal', 'admin', 'auth', 'publicURL',
                 'internalURL', 'adminURL'), help="Fake interface"),
             cfg.BoolOpt('insecure', default=False, help="Fake insecure"),
-            cfg.StrOpt('neutron',default='FakeNetwork',
-                       help='Fake Neutron service type.'),
             cfg.StrOpt('neutron_lbaas_version', default='v2',
                        choices=('v1', 'v2'),
                        help='Neutron load balancer version.')
         ], group=group)
+        self.CONF.register_opts([cfg.StrOpt(
+            'neutron',default='FakeNetwork',
+            help='Fake Neutron service type.'),],
+            group="service_types")
 
     @staticmethod
     def fake_ports_list():
