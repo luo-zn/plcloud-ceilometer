@@ -62,6 +62,11 @@ class BillingBase(plugin_base.NotificationBase):
         """
 
     def _process_notifications(self, priority, notifications):
+        """ #Overwrite this method. Change call to plcloudkitty_billing method.
+        :param priority:
+        :param notifications:
+        :return:
+        """
         for notification in notifications:
             try:
                 notification = messaging.convert_to_old_notification_format(
