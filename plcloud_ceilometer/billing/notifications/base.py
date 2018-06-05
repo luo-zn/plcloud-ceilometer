@@ -54,6 +54,13 @@ class BillingBase(plugin_base.NotificationBase):
                            self.get_notification_topics(conf))
         return targets
 
+    @abc.abstractmethod
+    def process_notification(self, message):
+        """Return a sequence of Counter instances for the given message.
+
+        :param message: Message to process.
+        """
+
     def _process_notifications(self, priority, notifications):
         for notification in notifications:
             try:
