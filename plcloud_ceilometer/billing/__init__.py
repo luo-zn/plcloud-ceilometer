@@ -4,9 +4,12 @@
 __author__ = "Jenner.luo"
 
 import abc
+from oslo_log import log
 from ceilometer.i18n import _LE
 from ceilometer.agent import plugin_base
 from plcloud_ceilometer.clients.plcloudkitty import PLCloudkittyClient
+
+LOG = log.getLogger(__name__)
 
 
 class EventNotificationBase(plugin_base.NotificationBase):
