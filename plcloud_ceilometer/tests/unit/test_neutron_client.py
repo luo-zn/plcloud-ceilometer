@@ -4,7 +4,7 @@
 __author__ = "Jenner.luo"
 
 import mock
-from oslo_config import fixture as fixture_config
+from oslo_config import fixture as fixture_config, cfg
 from oslotest import base
 from plcloud_ceilometer.clients.neutron import NeutronClient
 from . import fakes
@@ -16,8 +16,24 @@ class TestNeutronClient(base.BaseTestCase):
     def setUp(self):
         super(TestNeutronClient, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
+        self.register_service_credentials()
         self.nc = NeutronClient(self.CONF)
         self.nc.lb_version = 'v1'
+
+    def register_service_credentials(self):
+        group = "service_credentials"
+        self.CONF.register_opts([cfg.StrOpt(
+            'region_name', default="FakeRegion", help="Fake Region Name"),
+            cfg.StrOpt('interface', default="public",choices=(
+                'public', 'internal', 'admin', 'auth', 'publicURL',
+                'internalURL', 'adminURL'), help="Fake interface"),
+            cfg.BoolOpt('insecure', default=False, help="Fake insecure"),
+            cfg.StrOpt('neutron',default='FakeNetwork',
+                       help='Fake Neutron service type.'),
+            cfg.StrOpt('neutron_lbaas_version', default='v2',
+                       choices=('v1', 'v2'),
+                       help='Neutron load balancer version.')
+        ], group=group)
 
     @staticmethod
     def fake_ports_list():
