@@ -13,6 +13,11 @@ class TestBillingBase(base.BaseTestCase):
     def setUp(self):
         super(TestBillingBase, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
+        self.register_service_credentials()
+
+    def register_service_credentials(self):
+        group = "service_credentials"
+        self.CONF.set_override('region_name', 'FakeRegion', group)
 
     @property
     def fake_manager(self):
