@@ -6,7 +6,7 @@ __author__ = "Jenner.luo"
 import mock
 from oslotest import base
 from oslo_config import fixture as fixture_config
-from plcloud_ceilometer.billing.notifications import base
+from plcloud_ceilometer.billing.notifications import base as plugin_base
 
 
 class TestBillingBase(base.BaseTestCase):
@@ -14,7 +14,7 @@ class TestBillingBase(base.BaseTestCase):
         super(TestBillingBase, self).setUP()
         self.CONF = self.useFixture(fixture_config.Config()).conf
 
-        class FakeBillingBase(base.BillingBase):
+        class FakeBillingBase(plugin_base.BillingBase):
             event_types = ['compute.*']
 
             def plcloudkitty_billing(self, notification):
@@ -46,6 +46,7 @@ class TestBillingBase(base.BaseTestCase):
             'payload': {'foo': 'bar'},
             'message_id': '3577a84f-29ec-4904-9566-12c52289c2e8'
         }
+        print dir(plugin.plcloudkitty_billing)
         plugin.plcloudkitty_billing.assert_called_with(notification)
 
 
