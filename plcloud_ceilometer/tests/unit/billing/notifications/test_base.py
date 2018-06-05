@@ -14,14 +14,14 @@ class TestBillingBase(base.BaseTestCase):
         super(TestBillingBase, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
 
-        class FakeBillingBase(plugin_base.BillingBase):
-            event_types = ['compute.*']
+    class FakeBillingBase(plugin_base.BillingBase):
+        event_types = ['compute.*']
 
-            def plcloudkitty_billing(self, notification):
-                pass
+        def plcloudkitty_billing(self, notification):
+            pass
 
-            def get_targets(self, conf):
-                pass
+        def get_targets(self, conf):
+            pass
 
     def test_plugin_info(self):
         plugin = self.FakeBillingBase(mock.Mock())
