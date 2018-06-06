@@ -53,7 +53,7 @@ class TestCinderClient(base.BaseTestCase):
              u'volume_type': None}
         m = mock.MagicMock(**a)
         m.attrs = a.keys()
-        return
+        return m
 
     @classmethod
     def fake_volumes_list(cls, *args, **kwargs):
@@ -63,7 +63,6 @@ class TestCinderClient(base.BaseTestCase):
         with mock.patch.object(self.cc.client.volumes, 'get',
                                self.fake_volume):
             volume = self.cc.get_volume('9bbc9fec-79cb-469d-adb9-ff19b4c84117')
-        self.assertEqual(1, volume.size)
         for key in ['id', 'status', 'availability_zone','volume_type']:
             self.assertIn(key, volume.attrs)
 
