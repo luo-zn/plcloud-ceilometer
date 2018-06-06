@@ -35,8 +35,7 @@ class TestNeutronClient(base.BaseTestCase):
             cfg.StrOpt('neutron_lbaas_version', default='v2',
                        choices=('v1', 'v2'),
                        help='Neutron load balancer version.')
-        ],
-            group="service_types")
+        ],group="service_types")
 
     @classmethod
     def fake_ports_list(cls, *args, **kwargs):
