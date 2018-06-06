@@ -5,11 +5,14 @@ __author__ = "Jenner.luo"
 
 import mock
 from oslotest import base
-from oslo_config import fixture as fixture_config
+from oslo_config import fixture as fixture_config, cfg
 from plcloud_ceilometer.clients.cinder import CinderClient
+from .. import fakes
 
 
 class TestCinderClient(base.BaseTestCase):
+    @mock.patch('ceilometer.keystone_client.get_session',
+                fakes.keystone_client_get_session)
     def setUp(self):
         super(TestCinderClient, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
