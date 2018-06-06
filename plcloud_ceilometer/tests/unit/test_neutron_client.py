@@ -39,8 +39,8 @@ class TestNeutronClient(base.BaseTestCase):
         ],
             group="service_types")
 
-    @staticmethod
-    def fake_ports_list():
+    @classmethod
+    def fake_ports_list(cls, *args, **kwargs):
         return {'ports':
                 [{'admin_state_up': True,
                   'device_id': '674e553b-8df9-4321-87d9-93ba05b93558',
