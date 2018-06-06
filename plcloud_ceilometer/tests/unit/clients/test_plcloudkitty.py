@@ -8,7 +8,7 @@ from oslotest import base
 from oslo_config import fixture as fixture_config
 from ceilometer import service
 from plcloud_ceilometer.clients.plcloudkitty import PLCloudkittyClient
-from . import fakes
+from .. import fakes
 
 
 class TestPLClient(base.BaseTestCase):

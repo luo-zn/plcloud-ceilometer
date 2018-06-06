@@ -7,7 +7,7 @@ import mock
 from oslo_config import fixture as fixture_config, cfg
 from oslotest import base
 from plcloud_ceilometer.clients.neutron import NeutronClient
-from . import fakes
+from .. import fakes
 
 
 class TestNeutronClient(base.BaseTestCase):
@@ -130,7 +130,7 @@ class TestNeutronClient(base.BaseTestCase):
             port = self.nc.get_port('03b1a8bd-e26e-490d-9405-35e35103a86b')
             self.assertEqual('demo-port', port.get('name'))
             for key in ['name', 'id', 'project_id', 'tenant_id', 'status',
-                        'mac_address', 'network_id','device_id']:
+                        'mac_address', 'network_id', 'device_id']:
                 self.assertIn(key, port)
 
     def test_get_router(self):
