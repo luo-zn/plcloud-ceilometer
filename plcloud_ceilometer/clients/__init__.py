@@ -9,7 +9,7 @@ import abc
 import six
 from oslo_log import log
 from oslo_config import cfg
-from plcloud_ceilometer import exceptions
+from plcloud_ceilometer.utils import exceptions
 
 LOG = log.getLogger(__name__)
 

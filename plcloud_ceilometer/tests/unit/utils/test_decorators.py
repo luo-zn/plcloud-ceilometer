@@ -6,7 +6,7 @@ __author__ = "Jenner.luo"
 import logging
 import mock
 import unittest
-from plcloud_ceilometer import utils
+from plcloud_ceilometer.utils import decorators
 
 
 class TestUtils(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestUtils(unittest.TestCase):
 
     def test_catch_log(self):
         with mock.patch('oslo_log.log.getLogger', self.fake_getLogger):
-            @utils.catch_log
+            @decorators.catch_log
             def mock_func():
                 raise Exception('Mock Exception!')
 
