@@ -21,3 +21,5 @@ class TestUtils(unittest.TestCase):
         mo.method_with_catch_log = mock_func
 
         mo.method_with_catch_log()
+        mo.method_with_catch_log.assert_call()
+        print (mo.method_with_catch_log)
