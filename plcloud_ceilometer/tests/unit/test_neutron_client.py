@@ -146,4 +146,3 @@ class TestNeutronClient(base.BaseTestCase):
         with mock.patch.object(self.nc.client, 'delete_floatingip') as mo:
             self.nc.release_ip('aa-ee-aa')
             mo.assert_called_once_with('aa-ee-aa')
-            print dir(mo)
