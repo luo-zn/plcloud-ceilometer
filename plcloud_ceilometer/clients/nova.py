@@ -35,9 +35,6 @@ class NovaClient(ClientBase):
             service_type=self.conf.service_types.nova,
             logger=logger)
 
-    def create_image(self, instance_id, name):
-        self.client.servers.create_image(instance_id, name)
-
     def get_instance(self, instance_id):
         inst = self.client.servers.get(instance_id)
         addresses = [i['addr'] for i in chain(*inst.addresses.values())]
@@ -56,3 +53,6 @@ class NovaClient(ClientBase):
 
     def delete(self, instance_id):
         self.client.servers.delete(instance_id)
+
+    def create_image(self, instance_id, name):
+        self.client.servers.create_image(instance_id, name)

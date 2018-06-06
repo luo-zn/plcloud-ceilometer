@@ -64,3 +64,23 @@ class TestNovaClient(base.BaseTestCase):
         self.assertEqual(['10.0.0.9'], instance.ips)
         self.assertEqual(1, instance.flavor['id'])
         self.assertEqual(1, instance.image['id'])
+
+    def test_create_image_called(self):
+        with mock.patch.object(self.nvc.client.servers, 'create_image') as mo:
+            self.nvc.create_image('1', 'test-name')
+            mo.assert_called_once_with('1', 'test-name')
+
+    def test_confirm_resize_called(self):
+        with mock.patch.object(self.nvc.client.servers,'confirm_resize') as m:
+            self.nvc.confirm_resize('instance_id')
+            m.assert_called_once_with('instance_id')
+
+    def test_stop_called(self):
+        with mock.patch.object(self.nvc.client.servers, 'stop') as m:
+            self.nvc.stop('instance-id')
+            m.assert_called_once_with('instance-id')
+
+    def test_delete_called(self):
+        with mock.patch.object(self.nvc.client.servers, 'delete') as m:
+            self.nvc.delete('instance-id')
+            m.assert_called_once_with('instance-id')
