@@ -8,6 +8,7 @@ from oslo_config import cfg
 from . import ClientBase
 from ceilometer import keystone_client
 from plcloudkittyclient import client as plck_client
+from plcloud_ceilometer import utils
 
 LOG = log.getLogger(__name__)
 
@@ -21,14 +22,18 @@ class PLCloudkittyClient(ClientBase):
         insecure=self.conf.service_credentials.insecure,
         cacert=getattr(self.conf.service_credentials, 'cacert', None))
 
+    @utils.catch_log
     def get_billing(self):
         return self.client.billings.billing_manager.get_billing()
 
+    @utils.catch_log
     def create_billing(self, data):
         return self.client.billings.billing_manager.billing_event(data)
 
+    @utils.catch_log
     def billing_release(self, billing_id):
         self.client.billing.billing_manager.update(billing_id, status=12)
 
+    @utils.catch_log
     def billing_update(self, billing_id, status):
         self.client.billing.billing_manager.update(billing_id, status=status)
