@@ -3,11 +3,14 @@
 """
 __author__ = "Jenner.luo"
 
+import functools
+
 
 def catch_log(func):
     from oslo_log import log
     LOG = log.getLogger(__name__)
 
+    @functools.wraps(func)
     def logging(*args, **kwargs):
         try:
             return func(*args, **kwargs)
