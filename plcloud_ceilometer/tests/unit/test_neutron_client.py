@@ -24,13 +24,13 @@ class TestNeutronClient(base.BaseTestCase):
         group = "service_credentials"
         self.CONF.register_opts([cfg.StrOpt(
             'region_name', default="FakeRegion", help="Fake Region Name"),
-            cfg.StrOpt('interface', default="public",choices=(
+            cfg.StrOpt('interface', default="public", choices=(
                 'public', 'internal', 'admin', 'auth', 'publicURL',
                 'internalURL', 'adminURL'), help="Fake interface"),
             cfg.BoolOpt('insecure', default=False, help="Fake insecure"),
         ], group=group)
         self.CONF.register_opts([cfg.StrOpt(
-            'neutron',default='FakeNetwork',
+            'neutron', default='FakeNetwork',
             help='Fake Neutron service type.'),
             cfg.StrOpt('neutron_lbaas_version', default='v2',
                        choices=('v1', 'v2'),
@@ -41,17 +41,17 @@ class TestNeutronClient(base.BaseTestCase):
     @classmethod
     def fake_ports_list(cls, *args, **kwargs):
         return {'ports':
-                [{'admin_state_up': True,
-                  'device_id': '674e553b-8df9-4321-87d9-93ba05b93558',
-                  'device_owner': 'network:router_gateway',
-                  'extra_dhcp_opts': [],
-                  'id': '96d49cc3-4e01-40ce-9cac-c0e32642a442',
-                  'mac_address': 'fa:16:3e:c5:35:93',
-                  'name': '',
-                  'network_id': '298a3088-a446-4d5a-bad8-f92ecacd786b',
-                  'status': 'ACTIVE',
-                  'tenant_id': '89271fa581ab4380bf172f868c3615f9'},
-                 ]}
+                    [{'admin_state_up': True,
+                      'device_id': '674e553b-8df9-4321-87d9-93ba05b93558',
+                      'device_owner': 'network:router_gateway',
+                      'extra_dhcp_opts': [],
+                      'id': '96d49cc3-4e01-40ce-9cac-c0e32642a442',
+                      'mac_address': 'fa:16:3e:c5:35:93',
+                      'name': '',
+                      'network_id': '298a3088-a446-4d5a-bad8-f92ecacd786b',
+                      'status': 'ACTIVE',
+                      'tenant_id': '89271fa581ab4380bf172f868c3615f9'},
+                     ]}
 
     def test_get_all_ports(self):
         with mock.patch.object(self.nc.client, 'list_ports',
