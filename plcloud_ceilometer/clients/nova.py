@@ -10,6 +10,7 @@ from novaclient import api_versions
 from novaclient import client as nova_client
 from ceilometer import keystone_client
 from . import ClientBase
+from plcloud_ceilometer import utils
 
 LOG = log.getLogger(__name__)
 
@@ -18,6 +19,7 @@ class NovaClient(ClientBase):
     def __init__(self, conf=None):
         super(NovaClient, self).__init__(conf)
 
+    @utils.catch_log
     def initialize_client_hook(self):
         """Initialize a Nova client object."""
         creds = self.conf.service_credentials
@@ -35,24 +37,29 @@ class NovaClient(ClientBase):
             service_type=self.conf.service_types.nova,
             logger=logger)
 
+    @utils.catch_log
     def get_instance(self, instance_id):
         inst = self.client.servers.get(instance_id)
         addresses = [i['addr'] for i in chain(*inst.addresses.values())]
         inst.ips = addresses
         return inst
 
+    @utils.catch_log
     def get_all_instance(self):
         search_opts = {'all_tenants': True}
         return self.client.servers.list(True, search_opts)
 
+    @utils.catch_log
     def confirm_resize(self, instance_id):
         self.client.servers.confirm_resize(instance_id)
 
+    @utils.catch_log
     def stop(self, instance_id):
         self.client.servers.stop(instance_id)
 
     def delete(self, instance_id):
         self.client.servers.delete(instance_id)
 
+    @utils.catch_log
     def create_image(self, instance_id, name):
         self.client.servers.create_image(instance_id, name)

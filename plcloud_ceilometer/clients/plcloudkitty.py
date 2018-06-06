@@ -14,6 +14,7 @@ LOG = log.getLogger(__name__)
 
 
 class PLCloudkittyClient(ClientBase):
+    @utils.catch_log
     def initialize_client_hook(self):
         """Initialize a PLcloudkitty client object."""
         ks_session = keystone_client.get_session(self.conf)
