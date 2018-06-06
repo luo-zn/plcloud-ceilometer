@@ -131,7 +131,7 @@ class TestNeutronClient(base.BaseTestCase):
             self.assertEqual('demo-port', port.get('name'))
             for key in ['name', 'id', 'project_id', 'tenant_id', 'status',
                         'mac_address', 'network_id','device_id']:
-                self.assertIn(key, router)
+                self.assertIn(key, port)
 
     def test_get_router(self):
         with mock.patch.object(self.nc.client, 'show_router',
