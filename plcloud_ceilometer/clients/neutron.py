@@ -58,7 +58,7 @@ class NeutronClient(ClientBase):
 
     @logged
     def get_router(self, router_id):
-        return self.client.show_router(router_id)
+        return self.client.show_router(router_id).get('router')
 
     @logged
     def release_ip(self, floating_ip_id):
