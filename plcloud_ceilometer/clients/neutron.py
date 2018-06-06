@@ -29,6 +29,8 @@ def logged(func):
             LOG.exception(e)
             raise
 
+    return with_logging
+
 
 class NeutronClient(ClientBase):
     def __init__(self, conf=None):
