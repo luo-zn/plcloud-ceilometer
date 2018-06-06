@@ -51,7 +51,9 @@ class TestCinderClient(base.BaseTestCase):
              u'bootable': u'false',
              u'created_at': u'2018-05-30T12:18:13.000000',
              u'volume_type': None}
-        return mock.MagicMock(**a)
+        m = mock.MagicMock(**a)
+        m.attrs = a.keys()
+        return
 
     @classmethod
     def fake_volumes_list(cls, *args, **kwargs):
@@ -61,10 +63,9 @@ class TestCinderClient(base.BaseTestCase):
         with mock.patch.object(self.cc.client.volumes, 'get',
                                self.fake_volume):
             volume = self.cc.get_volume('9bbc9fec-79cb-469d-adb9-ff19b4c84117')
-        self.assertEqual('test-volume', volume.get('test-volume'))
-        for key in ['name', 'id', 'status', 'availability_zones',
-                    'volume_type']:
-            self.assertIn(key, volume)
+        self.assertEqual(1, volume.size)
+        for key in ['id', 'status', 'availability_zone','volume_type']:
+            self.assertIn(key, volume.attrs)
 
     def test_get_all_volume(self):
         with mock.patch.object(self.cc.client.volumes, 'list',
@@ -72,5 +73,4 @@ class TestCinderClient(base.BaseTestCase):
             volumes = self.cc.get_all_volume()
         self.assertEqual(1, len(volumes))
         self.assertEqual('9bbc9fec-79cb-469d-adb9-ff19b4c84117',
-                         volumes[0]['id'])
-        print dir(self.cc)
+                         volumes[0].id)
