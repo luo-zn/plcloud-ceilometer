@@ -33,5 +33,5 @@ class TestCinderClient(base.BaseTestCase):
             help='Cinder service type.'),
         ], group="service_types")
 
-    def test_cc(self):
+    def test_get_all_volume(self):
         print dir(self.cc)
