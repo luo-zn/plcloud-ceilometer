@@ -28,7 +28,6 @@ class TestNeutronClient(base.BaseTestCase):
                 'public', 'internal', 'admin', 'auth', 'publicURL',
                 'internalURL', 'adminURL'), help="Fake interface"),
             cfg.BoolOpt('insecure', default=False, help="Fake insecure"),
-
         ], group=group)
         self.CONF.register_opts([cfg.StrOpt(
             'neutron',default='FakeNetwork',
