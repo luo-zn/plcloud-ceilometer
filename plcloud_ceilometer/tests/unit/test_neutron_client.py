@@ -125,7 +125,7 @@ class TestNeutronClient(base.BaseTestCase):
                          ports[0]['id'])
 
     def test_get_port(self):
-        with mock.patch.object(self.nc.client, 'get_port',
+        with mock.patch.object(self.nc.client, 'show_port',
                                side_effect=self.fake_port):
             port = self.nc.get_port('03b1a8bd-e26e-490d-9405-35e35103a86b')
             self.assertEqual('demo-port', port.get('name'))
@@ -145,4 +145,5 @@ class TestNeutronClient(base.BaseTestCase):
     def test_release_ip_call(self):
         with mock.patch.object(self.nc.client, 'delete_floatingip') as mo:
             self.nc.release_ip('aa-ee-aa')
+            mo.assert_called_once_with('aa-ee-aa')
             print dir(mo)
