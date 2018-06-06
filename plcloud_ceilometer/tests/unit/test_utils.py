@@ -3,7 +3,7 @@
 """
 __author__ = "Jenner.luo"
 
-import sys
+import logging
 import mock
 import unittest
 from plcloud_ceilometer import utils
@@ -14,12 +14,13 @@ class TestUtils(unittest.TestCase):
         pass
 
     @classmethod
-    def fake_sys_stdout(cls, *args, **kwargs):
-        print args, kwargs
+    def fake_getLogger(cls, *args, **kwargs):
+        mock_logger = mock.Mock()
+        mock_logger.exception = mock.Mock()
+        return mock_logger
 
     def test_catch_log(self):
-        with mock.path.object(sys, 'stdout', side_effect=self.fake_sys_stdout) as mo:
-            print mo
+        with mock.patch('oslo_log.log.getLogger', self.fake_getLogger):
             @utils.catch_log
             def mock_func():
                 raise Exception('Mock Exception!')
