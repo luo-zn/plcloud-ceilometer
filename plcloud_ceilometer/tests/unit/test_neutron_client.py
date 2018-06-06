@@ -141,3 +141,8 @@ class TestNeutronClient(base.BaseTestCase):
         for key in ['name', 'id', 'project_id', 'tenant_id', 'status',
                     'availability_zones', 'routes']:
             self.assertIn(key, router)
+
+    def test_release_ip_call(self):
+        with mock.patch.object(self.nc.client, 'delete_floatingip') as mo:
+            self.nc.release_ip('aa-ee-aa')
+            print dir(mo)
