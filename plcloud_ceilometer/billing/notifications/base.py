@@ -5,7 +5,6 @@ __author__ = "Jenner.luo"
 
 import abc
 import types
-import fnmatch
 import oslo_messaging
 from oslo_log import log
 from ceilometer import service

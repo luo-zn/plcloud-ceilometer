@@ -4,6 +4,7 @@
 __author__ = "Jenner.luo"
 
 import abc
+import fnmatch
 from oslo_log import log
 from ceilometer.i18n import _LE
 from ceilometer.agent import plugin_base
