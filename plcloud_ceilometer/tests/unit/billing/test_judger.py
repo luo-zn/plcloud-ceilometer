@@ -15,15 +15,15 @@ class TestStop(TestBase):
         return {u'_context_domain': None,
                 u'_context_request_id': u'req-92bb634a-3637-4aef-ae0c-3e5f2d1736f8',
                 u'_context_quota_class': None,
-                'event_type': u'plcloudkitty.billing.stop',
+                u'event_type': u'plcloudkitty.billing.stop',
                 u'_context_auth_token': u'004d7e1779074629a221d25da9c7d03b',
                 u'_context_resource_uuid': None,
-                'payload': {u'state_description': u'',
-                            u'availability_zone': u'nova',
-                            u'terminated_at': u'',
-                            'res_type': 'instance', 'res_id': 1,
-                            'res_name':'test-stop'
-                            }}
+                u'payload': {u'state_description': u'',
+                             u'availability_zone': u'nova',
+                             u'terminated_at': u'',
+                             u'res_type': u'instance', u'res_id': 1,
+                             u'res_name': u'test-stop'
+                             }}
 
     def test_stop_instance(self):
         s = Stop(self.fake_manager)
