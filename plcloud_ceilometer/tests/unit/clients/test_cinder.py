@@ -84,7 +84,7 @@ class TestCinderClient(base.BaseTestCase):
              u'name': u'snapshot1'}
         m = mock.MagicMock(**a)
         m.delete = mock.MagicMock()
-        return a
+        return m
 
     @classmethod
     def fake_snapshot_list(cls, *args, **kwargs):
