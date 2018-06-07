@@ -21,7 +21,8 @@ class TestStop(TestBase):
                 'payload': {u'state_description': u'',
                             u'availability_zone': u'nova',
                             u'terminated_at': u'',
-                            'res_type': 'instance', 'res_id': 1
+                            'res_type': 'instance', 'res_id': 1,
+                            'res_name':'test-stop'
                             }}
 
     def test_stop_instance(self):
