@@ -61,7 +61,8 @@ class TestCinderClient(base.BaseTestCase):
              u'bootable': u'false',
              u'created_at': u'2018-05-30T12:18:13.000000',
              u'volume_type': None}
-        m = mock.MagicMock(**a)
+        m = mock.MagicMock()
+        m.configure_mock(**a)
         m.attrs = a.keys()
         m.detach = mock.MagicMock()
         m.delete = mock.MagicMock()
@@ -82,7 +83,8 @@ class TestCinderClient(base.BaseTestCase):
              u'volume_id': u'9bbc9fec-79cb-469d-adb9-ff19b4c84117',
              u'metadata': {}, u'created_at': u'2018-06-06T11:15:42.000000',
              u'name': u'snapshot1'}
-        m = mock.MagicMock(**a)
+        m = mock.MagicMock()
+        m.configure_mock(**a)
         m.delete = mock.MagicMock()
         return m
 
