@@ -6,6 +6,7 @@ __author__ = "Jenner.luo"
 import mock
 from oslotest import base
 from oslo_config import fixture as fixture_config, cfg
+from ceilometer import service
 from plcloud_ceilometer.billing.notifications import base as plugin_base
 
 
@@ -22,7 +23,8 @@ class FakeBillingBase(plugin_base.BillingBase):
 class TestBase(base.BaseTestCase):
     def setUp(self):
         super(TestBase, self).setUp()
-        self.CONF = self.useFixture(fixture_config.Config()).conf
+        conf = service.prepare_service([], [])
+        self.CONF = self.useFixture(fixture_config.Config(conf)).conf
         self.register_service_credentials()
 
     def register_service_credentials(self):
