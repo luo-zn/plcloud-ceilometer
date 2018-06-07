@@ -35,7 +35,7 @@ class TestStop(TestBase):
         mock_stop = mock.patch.object(s.novaclient, 'stop')
         mock_stop.start()
         mock_log = fakes.getLogger()
-        with mock.patch.object('oslo_log.log','getLogger',
+        with mock.patch.object(oslo_log.log,'getLogger',
                                return_value=mock_log):
             s.process_notification(self.message)
             mock_stop.get_original()[0].assert_called_once_with(

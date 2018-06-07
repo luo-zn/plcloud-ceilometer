@@ -21,6 +21,7 @@ def keystone_client_get_session(*args, **kwargs):
 def getLogger(*args, **kwargs):
     mock_logger = mock.Mock()
     mock_logger.exception = mock.Mock()
+    mock_logger.debug = mock.Mock()
     mock_logger.info = mock.Mock()
     mock_logger.error = mock.Mock()
     return mock_logger
