@@ -9,16 +9,6 @@ from oslo_config import fixture as fixture_config, cfg
 from plcloud_ceilometer.clients.cinder import CinderClient
 from .. import fakes
 
-a = {u'migration_status': None, u'attachments': [],
-     u'availability_zone': u'nova',
-     u'os-vol-host-attr:host': u'all-in-one@lvm-1#lvm-1'}
-
-
-class FakeObject(object):
-    def __init__(self, dict_):
-        for key, val in dict_.iteritems():
-            setattr(self, key, val)
-
 
 class TestCinderClient(base.BaseTestCase):
     @mock.patch('ceilometer.keystone_client.get_session',
