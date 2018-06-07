@@ -19,9 +19,9 @@ class JudgerBase(EventNotificationBase):
     def __init__(self, manager):
         super(JudgerBase, self).__init__(manager)
         self.hook_method = self.judging
-        self.novaclient = NovaClient(manager)
-        self.neutronclient = client.NeutronClient()
-        self.cinderclient = client.CinderClient()
+        self.novaclient = NovaClient(manager.conf)
+        self.neutronclient = NeutronClient(manager.conf)
+        self.cinderclient = CinderClient(manager.conf)
 
     def get_targets(self, conf):
         """oslo.messaging.TargetS for this plugin."""
