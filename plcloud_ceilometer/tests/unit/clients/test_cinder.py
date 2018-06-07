@@ -105,9 +105,10 @@ class TestCinderClient(base.BaseTestCase):
         self.assertEqual('9bbc9fec-79cb-469d-adb9-ff19b4c84117',
                          volumes[0].id)
 
-    @mock.patch('plcloud_ceilometer.clients.cinder.CinderClient.client'
-                '.volume_snapshots.delete', lambda x: x)
-    def test_delete_volume(self, mock_delete):
+    def test_delete_volume(self):
+        mock_delete = mock.patch.object(self.cc.client.volume_snapshots,
+                                        'delete')
+        mock_delete.start()
         with mock.patch.object(self.cc.client.volumes, 'get',
                                side_effect=self.fake_volume):
             with mock.patch.object(self.cc.client.volume_snapshots, 'list',
