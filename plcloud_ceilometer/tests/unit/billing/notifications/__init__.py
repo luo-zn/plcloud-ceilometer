@@ -25,14 +25,6 @@ class TestBase(base.BaseTestCase):
         super(TestBase, self).setUp()
         conf = service.prepare_service([], [])
         self.CONF = self.useFixture(fixture_config.Config(conf)).conf
-    #     self.register_service_credentials()
-    #
-    # def register_service_credentials(self):
-    #     group = "service_credentials"
-    #     self.CONF.register_opts([cfg.StrOpt(
-    #         'region_name', default="FakeRegion", help="Fake Region Name"),
-    #         cfg.BoolOpt('insecure', default=False, help="Fake insecure"),
-    #     ], group=group)
 
     @property
     def fake_manager(self):

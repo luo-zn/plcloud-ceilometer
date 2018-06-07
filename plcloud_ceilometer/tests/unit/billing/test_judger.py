@@ -32,9 +32,9 @@ class TestStop(TestBase):
                 fakes.keystone_client_get_session)
     def test_stop_instance(self):
         s = Stop(self.fake_manager)
-        ns = mock.pach.object(s.novaclient, 'stop')
-        ns.start()
+        mock_stop = mock.patch.object(s.novaclient, 'stop')
+        mock_stop.start()
         s.process_notification(self.message)
-        mock_delete.get_original()[0].assert_called_once_with(
+        mock_stop.get_original()[0].assert_called_once_with(
             self.message['payload']['res_id'])
-        ns.stop()
+        mock_stop.stop()
