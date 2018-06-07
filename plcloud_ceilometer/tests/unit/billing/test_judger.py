@@ -30,12 +30,15 @@ class TestStop(TestBase):
                 fakes.plck_client_get_endpoint)
     @mock.patch('ceilometer.keystone_client.get_session',
                 fakes.keystone_client_get_session)
-    @mock.patch('oslo_log.log.getLogger', fakes.getLogger)
     def test_stop_instance(self):
         s = Stop(self.fake_manager)
         mock_stop = mock.patch.object(s.novaclient, 'stop')
         mock_stop.start()
-        s.process_notification(self.message)
-        mock_stop.get_original()[0].assert_called_once_with(
-            self.message['payload']['res_id'])
+        mock_log = fakes.getLogger()
+        with mock.patch.object('oslo_log.log','getLogger',
+                               return_value=mock_log):
+            s.process_notification(self.message)
+            mock_stop.get_original()[0].assert_called_once_with(
+                self.message['payload']['res_id'])
+            mock_log.info.assert_called()
         mock_stop.stop()
