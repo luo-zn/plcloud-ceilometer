@@ -24,7 +24,8 @@ class NovaClient(ClientBase):
         """Initialize a Nova client object."""
         creds = self.conf.service_credentials
         logger = None
-        if self.conf.nova_http_log_debug:
+        if hasattr(self.conf, 'nova_http_log_debug') and getattr(
+                self.conf, 'nova_http_log_debug'):
             logger = log.getLogger("novaclient-debug")
             logger.logger.setLevel(log.DEBUG)
         ks_session = keystone_client.get_session(self.conf)
