@@ -6,6 +6,7 @@ __author__ = "Jenner.luo"
 import mock
 from oslotest import base
 from .notifications import TestBase
+from .. import fakes
 from plcloud_ceilometer.billing.judger import Stop
 
 
@@ -25,6 +26,10 @@ class TestStop(TestBase):
                              u'res_name': u'test-stop'
                              }}
 
+    @mock.patch('plcloudkittyclient.client._get_endpoint',
+                fakes.plck_client_get_endpoint)
+    @mock.patch('ceilometer.keystone_client.get_session',
+                fakes.keystone_client_get_session)
     def test_stop_instance(self):
         s = Stop(self.fake_manager)
         ns = mock.pach.object(s.novaclient, 'stop')
