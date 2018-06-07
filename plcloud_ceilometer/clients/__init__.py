@@ -22,7 +22,7 @@ class ClientBase(object):
 
     @abc.abstractmethod
     def initialize_client_hook(self):
-        '''initialize_client_hook'''
+        """initialize_client_hook"""
 
 
 class APIVersionManager(object):
