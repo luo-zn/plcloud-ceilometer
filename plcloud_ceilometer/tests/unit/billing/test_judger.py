@@ -7,7 +7,7 @@ import mock
 from oslotest import base
 from .notifications import TestBase
 from .. import fakes
-from plcloud_ceilometer.billing.judger import Stop
+from plcloud_ceilometer.billing import judger
 
 
 class TestStop(TestBase):
@@ -31,13 +31,11 @@ class TestStop(TestBase):
     @mock.patch('ceilometer.keystone_client.get_session',
                 fakes.keystone_client_get_session)
     def test_stop_instance(self):
-        s = Stop(self.fake_manager)
-        mock_stop = mock.patch.object(s.novaclient, 'stop')
-        mock_stop.start()
-        mock_log = fakes.getLogger()
-        with mock.patch('oslo_log.log.getLogger', return_value=mock_log):
+        with mock.patch('oslo_log.log.getLogger', fakes.getLogger):
+            s = judger.Stop(self.fake_manager)
+            mock_stop = mock.patch.object(s.novaclient, 'stop')
+            mock_stop.start()
             s.process_notification(self.message)
             mock_stop.get_original()[0].assert_called_once_with(
                 self.message['payload']['res_id'])
-            mock_log.info.assert_called()
-        mock_stop.stop()
+            mock_stop.stop()
