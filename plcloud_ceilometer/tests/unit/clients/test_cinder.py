@@ -65,7 +65,7 @@ class TestCinderClient(base.BaseTestCase):
         m.configure_mock(**a)
         m.attrs = a.keys()
         m.detach = mock.MagicMock()
-        m.delete = mock.MagicMock()
+        m.delete = mock.MagicMock(return_value=True)
         return m
 
     @classmethod
@@ -115,8 +115,9 @@ class TestCinderClient(base.BaseTestCase):
                                side_effect=self.fake_volume):
             with mock.patch.object(self.cc.client.volume_snapshots, 'list',
                                    side_effect=self.fake_snapshot_list):
-                volume = self.cc.delete_volume(
+                del_status = self.cc.delete_volume(
                     '9bbc9fec-79cb-469d-adb9-ff19b4c84117')
-                volume.detach.assert_called_once_with()
-                volume.delete.assert_called_once_with()
-                mock_delete.assert_called_once_with()
+                assert del_status is True
+                mock_delete.get_original()[0].assert_called_once_with(
+                    'e6bd5b76-84fb-4cf2-9f3d-9b625c031804')
+        mock_delete.stop()
