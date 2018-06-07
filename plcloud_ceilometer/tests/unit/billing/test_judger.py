@@ -30,6 +30,7 @@ class TestStop(TestBase):
                 fakes.plck_client_get_endpoint)
     @mock.patch('ceilometer.keystone_client.get_session',
                 fakes.keystone_client_get_session)
+    @mock.patch('oslo_log.log.getLogger', fakes.getLogger)
     def test_stop_instance(self):
         s = Stop(self.fake_manager)
         mock_stop = mock.patch.object(s.novaclient, 'stop')
