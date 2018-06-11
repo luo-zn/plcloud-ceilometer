@@ -74,7 +74,7 @@ class Instance(BillingBase):
                 'project_id': tenant_id}
 
 
-class Image(BillingBase):
+class InstanceImage(BillingBase):
     event_types = [
         "compute.instance.create.end",
         "compute.instance.delete.end",
@@ -99,10 +99,13 @@ class Image(BillingBase):
         timestamp = message['timestamp']
         event_type = message['event_type']
         res_meta = {
-            'architecture': message['payload']['image_meta']['architecture'],
-            'os_distro': message['payload']['image_meta']['os_distro'],
-            'os_version': message['payload']['image_meta']['os_version'],
-            'vol_size': message['payload']['image_meta']['vol_size'],
+            'os_type': message['payload']['os_type'],
+            'architecture': message['payload']['architecture'],
+            'image_ref_url': message['payload']['image_ref_url'],
+            'min_disk': message['payload']['image_meta']['min_disk'],
+            'container_format': message['payload']['image_meta']['container_format'],
+            'min_ram': message['payload']['image_meta']['min_ram'],
+            'disk_format': message['payload']['image_meta']['disk_format'],
             'base_image_ref': message['payload']['image_meta'][
                 'base_image_ref']}
         return {'message_id': message_id,
