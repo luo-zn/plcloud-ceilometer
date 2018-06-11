@@ -88,6 +88,7 @@ class Image(BillingBase):
 
     def process_notification(self, message):
         LOG.debug(_('Image notification %r') % message)
+        print 'image ', message
         user_id = message['payload']['user_id']
         tenant_id = message['payload']['tenant_id']
         res_id = '%s_%s' % (message['payload']['image_meta']['image_id'],
